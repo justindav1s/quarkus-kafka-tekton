@@ -9,17 +9,17 @@ objects:
   metadata:
     annotations:
     labels:
-      app: ${APPLICATION_NAME}
+      app: ${APP_NAME}
       version: ${VERSION_LABEL}
-    name: ${APPLICATION_NAME}-${VERSION_LABEL}
+    name: ${APP_NAME}-${VERSION_LABEL}
   spec:
     progressDeadlineSeconds: 600
     replicas: 1
     revisionHistoryLimit: 10
     selector:
       matchLabels:
-        app: ${APPLICATION_NAME}
-        deployment: ${APPLICATION_NAME}
+        app: ${APP_NAME}
+        deployment: ${APP_NAME}
     strategy:
       type: RollingUpdate
     template:
@@ -27,19 +27,19 @@ objects:
         annotations:
           sidecar.istio.io/inject: "true"
         labels:
-          app: ${APPLICATION_NAME}
-          deployment: ${APPLICATION_NAME}
+          app: ${APP_NAME}
+          deployment: ${APP_NAME}
           version: ${VERSION_LABEL}
       spec:
         containers:
           - env:
-              - name: SPRING_PROFILES_ACTIVE
-                value: "${SPRING_PROFILES_ACTIVE}"
+              - name: PROFILE
+                value: "${PROFILE}"
             image: ${IMAGE_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
             imagePullPolicy: Always
             ports:
             - containerPort: 8080
-            name: ${APPLICATION_NAME}
+            name: ${APP_NAME}
             resources:
               limits:
                 cpu: 200m
@@ -49,7 +49,7 @@ objects:
                 memory: 256Mi
             livenessProbe:
               httpGet:
-                path: /${APPLICATION_NAME}/health
+                path: /${APP_NAME}/health
                 port: 8080
                 scheme: HTTP
               initialDelaySeconds: 20
@@ -59,7 +59,7 @@ objects:
               failureThreshold: 3
             readinessProbe:
               httpGet:
-                path: /${APPLICATION_NAME}/health
+                path: /${APP_NAME}/health
                 port: 8080
                 scheme: HTTP
               initialDelaySeconds: 20
@@ -71,9 +71,9 @@ objects:
             terminationMessagePolicy: File
             volumeMounts:
               - mountPath: /deployments/config
-                name: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-application-properties
+                name: $(APP_NAME)-$(PROFILE)-application-properties
               - mountPath: /deployments/truststore
-                name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore                
+                name: ${APP_NAME}-${PROFILE}-kafka-truststore                
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         securityContext: {}
@@ -81,16 +81,16 @@ objects:
         serviceAccountName: ${SERVICEACCOUNT_NAME}
         terminationGracePeriodSeconds: 35
         volumes:
-          - name: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-application-properties
+          - name: $(APP_NAME)-$(PROFILE)-application-properties
             secret:
-              secretName: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-config           
-          - name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
+              secretName: $(APP_NAME)-$(PROFILE)-config           
+          - name: ${APP_NAME}-${PROFILE}-kafka-truststore
             secret:
-              secretName: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
+              secretName: ${APP_NAME}-${PROFILE}-kafka-truststore
 
 parameters:
   - description: The name for the application.
-    name: APPLICATION_NAME
+    name: APP_NAME
     required: true
     value: "inventory"
   - description: The name for the application image.
@@ -106,7 +106,7 @@ parameters:
     required: true
     value: "0.0.1-SNAPSHOT"
   - description: The Spring Active Profile.
-    name: SPRING_PROFILES_ACTIVE
+    name: PROFILE
     required: true
     value: "prd"
   - description: The version label for the application.

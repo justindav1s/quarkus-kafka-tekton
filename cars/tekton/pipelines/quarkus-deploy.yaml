@@ -82,7 +82,7 @@ spec:
     runAfter:
       - configure-filesystem
     params:
-      - name: APPLICATION_NAME
+      - name: APP_NAME
         value: $(params.APP_NAME)
       - name: IMAGE_REPO
         value: $(params.IMAGE_REPO)
@@ -90,7 +90,7 @@ spec:
         value: $(params.APP_NAME)
       - name: IMAGE_TAG
         value: $(params.IMAGE_TAG)
-      - name: SPRING_PROFILES_ACTIVE
+      - name: PROFILE
         value: $(params.APP_PROFILE)
       - name: VERSION_LABEL
         value: $(params.VERSION_LABEL)
