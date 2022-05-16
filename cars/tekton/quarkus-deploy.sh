@@ -37,7 +37,7 @@ oc apply -f tasks/run-script-task.yaml
 oc apply -f tasks/oc-deploy-template.yaml
 oc apply -f pipelines/quarkus-deploy.yaml
 
-oc delete pvc -l app=${APP}
+oc delete PipelineRun -l tekton.dev/pipeline=quarkus-deploy
 
 tkn pipeline start quarkus-deploy \
     -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \
