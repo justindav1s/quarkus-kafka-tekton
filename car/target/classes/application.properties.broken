@@ -1,0 +1,14 @@
+kafka.bootstrap.servers=my-cluster-kafka-bootstrap-kafka-cluster.apps.sno.openshiftlabs.net:443
+kafka.security.protocol=SSL
+# kafka.sasl.mechanism=SCRAM-SHA-256
+# kafka.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="kafka-user" password="U4kA3DXMXXi";
+kafka.ssl.truststore.location=/Users/justin/github/microservices-on-openshift/src/quarkus/car/truststore/user-truststore.jks
+kafka.sl.truststore.password=U4kA3DXMXXiV
+kafka.ssl.truststore.type=JKS
+# mp.messaging.connector.smallrye-kafka.security.protocol=SASL_SSL
+# mp.messaging.connector.smallrye-kafka.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="kafka-user" password="U4kA3DXMXXiV";
+# sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="kafka-user" password="U4kA3DXMXXiV";
+
+
+# mp.messaging.connector.smallrye-kafka.security.protocol=SCRAM-SHA-256
+# mp.messaging.connector.smallrye-kafka.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="kafka-user" password="U4kA3DXMXXiV";

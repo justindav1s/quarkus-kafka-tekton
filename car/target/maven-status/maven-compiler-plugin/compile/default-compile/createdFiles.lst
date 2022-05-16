@@ -1,0 +1,3 @@
+org/jnd/car/model/Car.class
+org/jnd/car/controller/CarsResource.class
+org/jnd/car/model/CarDeserializer.class

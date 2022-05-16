@@ -1,0 +1,46 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-template
+spec:
+  workspaces:
+  - name: source
+  params:
+    - name: APPLICATION_NAME
+      type: string
+    - name: IMAGE_REPO
+      type: string
+    - name: IMAGE_NAME
+      type: string
+    - name: IMAGE_TAG
+      type: string
+    - name: SPRING_PROFILES_ACTIVE
+      type: string
+    - name: VERSION_LABEL
+      type: string
+    - name: SERVICEACCOUNT_NAME
+      type: string
+  steps:
+    - name: apply
+      image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+      workingDir: /workspace/source
+      command: ["/bin/bash", "-c"]
+      args:
+        - |-
+          echo -----------CLEANUP------------------------
+          oc delete sa,deployment,service,route -l app=$(params.APPLICATION_NAME)
+          echo -----------DEPLOY------------------------
+          oc new-app -f tekton/ocp-templates/ingress-template.yaml \
+            -p APPLICATION_NAME=$(params.APPLICATION_NAME) \
+            -p SERVICE_NAME=$(params.IMAGE_NAME) \
+            -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME)
+
+          oc new-app -f tekton/ocp-templates/spring-boot-deployment-template.yaml \
+            -p APPLICATION_NAME=$(params.APPLICATION_NAME) \
+            -p IMAGE_REPO=$(params.IMAGE_REPO) \
+            -p IMAGE_NAME=$(params.IMAGE_NAME) \
+            -p IMAGE_TAG=$(params.IMAGE_TAG) \
+            -p SPRING_PROFILES_ACTIVE=$(params.SPRING_PROFILES_ACTIVE) \
+            -p VERSION_LABEL=$(params.VERSION_LABEL) \
+            -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME)
+          echo -------------DONE-------------------
