@@ -44,8 +44,8 @@ spec:
           oc create secret generic $(params.APP_NAME)-$(params.PROFILE)-kafka-truststore \
               --from-file=../kafka-truststore.jks
 
-          oc label configmap $(params.APP_NAME)-$(params.PROFILE)-application-properties app=$(params.APP_NAME)
-          oc label configmap $(params.APP_NAME)-$(params.PROFILE)-kafka-truststore app=$(params.APP_NAME)
+          oc label secret $(params.APP_NAME)-$(params.PROFILE)-application-properties app=$(params.APP_NAME)
+          oc label secret $(params.APP_NAME)-$(params.PROFILE)-kafka-truststore app=$(params.APP_NAME)
 
           oc new-app -f tekton/ocp-templates/deployment-template.yaml \
             -p APP_NAME=$(params.APP_NAME) \
