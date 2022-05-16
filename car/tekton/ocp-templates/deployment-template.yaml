@@ -19,7 +19,7 @@ objects:
     selector:
       matchLabels:
         app: ${APPLICATION_NAME}
-        deploymentconfig: ${APPLICATION_NAME}
+        deployment: ${APPLICATION_NAME}
     strategy:
       type: RollingUpdate
     template:

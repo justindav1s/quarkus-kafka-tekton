@@ -36,7 +36,7 @@ spec:
             -p SERVICE_NAME=$(params.IMAGE_NAME) \
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME)
 
-          oc secrets link $(params.SERVICEACCOUNT_NAME) quay-dockercfg   
+          oc secrets link $(params.SERVICEACCOUNT_NAME) quay-dockercfg --for=pull  
 
           oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-config \
               --from-file=src/main/resources/config.$(params.SPRING_PROFILES_ACTIVE).properties           
