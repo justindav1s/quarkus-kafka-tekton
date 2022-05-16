@@ -72,6 +72,8 @@ objects:
             volumeMounts:
               - mountPath: /config
                 name: ${APPLICATION_NAME}-config-vol
+              - mountPath: /deployments/truststore
+                name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore                
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         securityContext: {}
@@ -83,6 +85,10 @@ objects:
               defaultMode: 420
               name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-config
             name: ${APPLICATION_NAME}-config-vol
+          - configMap:
+              defaultMode: 420
+              name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
+            name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
 
 parameters:
   - description: The name for the application.
