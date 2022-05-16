@@ -83,7 +83,7 @@ objects:
         volumes:
           - name: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-application-properties
             secret:
-              SecretName: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-config           
+              secretName: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-config           
           - name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
             secret:
               secretName: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
