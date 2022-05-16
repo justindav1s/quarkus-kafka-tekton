@@ -2,7 +2,7 @@
 
 
 PROJECT=connected
-APP=car
+APP=cars
 PROFILE=dev
 
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore

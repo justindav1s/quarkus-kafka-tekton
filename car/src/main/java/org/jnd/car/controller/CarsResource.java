@@ -20,6 +20,12 @@ public class CarsResource {
     @Channel("car-requests")
     Emitter<String> CarRequestEmitter;
 
+    @GET
+    @Path("/health")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String health() {
+        return "OK";
+    }
     /**
      * Endpoint to generate a new Car request id and send it to "Car-requests" Kafka topic using the emitter.
      */
