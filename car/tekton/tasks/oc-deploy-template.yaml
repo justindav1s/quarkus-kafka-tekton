@@ -28,20 +28,26 @@ spec:
       args:
         - |-
           echo -----------CLEANUP------------------------
-          oc delete sa,deployment,service,route -l app=$(params.APPLICATION_NAME)
+          oc delete sa,deployment,service,route,configmap,secret -l app=$(params.APPLICATION_NAME)
           echo -----------DEPLOY------------------------
           oc new-app -f tekton/ocp-templates/ingress-template.yaml \
             -p APPLICATION_NAME=$(params.APPLICATION_NAME) \
             -p SERVICE_NAME=$(params.IMAGE_NAME) \
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME)
 
+          oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-config \
+              --from-file=../src/main/resources/config.$(params.SPRING_PROFILES_ACTIVE).properties           
+
           oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
               --from-file=../kafka-truststore.jks
+
+          oc create secret generic $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-application-properties \
+              --from-file=../src/main/resources/application.$(params.SPRING_PROFILES_ACTIVE).properties
 
           oc create secret generic $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
               --from-file=../kafka-truststore.jks
 
-          oc new-app -f tekton/ocp-templates/boot-deployment-template.yaml \
+          oc new-app -f tekton/ocp-templates/deployment-template.yaml \
             -p APPLICATION_NAME=$(params.APPLICATION_NAME) \
             -p IMAGE_REPO=$(params.IMAGE_REPO) \
             -p IMAGE_NAME=$(params.IMAGE_NAME) \
