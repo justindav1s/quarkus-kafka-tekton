@@ -28,7 +28,7 @@ objects:
           sidecar.istio.io/inject: "true"
         labels:
           app: ${APPLICATION_NAME}
-          deploymentconfig: ${APPLICATION_NAME}
+          deployment: ${APPLICATION_NAME}
           version: ${VERSION_LABEL}
       spec:
         containers:
