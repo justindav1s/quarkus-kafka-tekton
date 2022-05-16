@@ -27,3 +27,8 @@ hs_err_pid*
 *.cert
 *.pem
 *.jks
+*.secret
+**/target
+car/target/*
+target/
+**/target/
