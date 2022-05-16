@@ -70,11 +70,11 @@ spec:
         #!/usr/bin/env bash
         set -xe
         echo "Script running in $(workspaces.storage.path)"
+        echo "fixing  permissions....."
         chmod -R 777 $(workspaces.storage.path)
-        ls -ltr $(workspaces.storage.path)
-        ls -ltr $(workspaces.truststore.path)
-        find /workspace -name "*.jks"
+        echo "making kafka-trustore.jks available to build/test"
         cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
+        ls -ltr $(workspaces.storage.path)
     runAfter:
       - fetch-repository
   - name: test-java-app
@@ -99,66 +99,68 @@ spec:
         workspace: maven-settings
       - name: source
         workspace: shared-workspace
-  # - name: build-java-app
-  #   taskRef:
-  #     name: maven
-  #     kind: ClusterTask
-  #   runAfter:
-  #     - test-java-app
-  #   params:
-  #     - name: CONTEXT_DIR
-  #       value: $(params.CONTEXT_DIR)
-  #     - name: GOALS
-  #       value:
-  #         - -U
-  #         - -q 
-  #         - -Dmaven.wagon.http.ssl.insecure=true 
-  #         - -Dmaven.wagon.http.ssl.allowall=true
-  #         - -B
-  #         - '-DskipTests'
-  #         - 'clean'
-  #         - 'deploy'
-  #   workspaces:
-  #     - name: maven-settings
-  #       workspace: maven-settings
-  #     - name: source
-  #       workspace: shared-workspace
-  # - name: build-image
-  #   taskRef:
-  #     name: buildah
-  #     kind: ClusterTask
-  #   runAfter:
-  #     - build-java-app
-  #   params:
-  #     - name: IMAGE
-  #       value: $(params.IMAGE_REPO)/$(params.APP_NAME)
-  #     - name: CONTEXT
-  #       value: $(params.CONTEXT_DIR) 
-  #     - name: TLSVERIFY
-  #       value: 'false'
-  #   workspaces:
-  #     - name: source
-  #       workspace: shared-workspace
-  # - name: deploy-image
-  #   taskRef:
-  #     name: deploy-template
-  #   runAfter:
-  #     - build-image
-  #   params:
-  #     - name: APPLICATION_NAME
-  #       value: $(params.APP_NAME)
-  #     - name: IMAGE_REPO
-  #       value: $(params.IMAGE_REPO)
-  #     - name: IMAGE_NAME
-  #       value: $(params.APP_NAME)
-  #     - name: IMAGE_TAG
-  #       value: $(params.IMAGE_TAG)
-  #     - name: SPRING_PROFILES_ACTIVE
-  #       value: $(params.APP_PROFILE)
-  #     - name: VERSION_LABEL
-  #       value: $(params.VERSION_LABEL)
-  #     - name: SERVICEACCOUNT_NAME
-  #       value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
-  #   workspaces:
-  #     - name: source
-  #       workspace: shared-workspace
+  - name: build-java-app
+    taskRef:
+      name: maven
+      kind: ClusterTask
+    runAfter:
+      - test-java-app
+    params:
+      - name: CONTEXT_DIR
+        value: $(params.CONTEXT_DIR)
+      - name: GOALS
+        value:
+          - -U
+          - -q 
+          - -Dmaven.wagon.http.ssl.insecure=true 
+          - -Dmaven.wagon.http.ssl.allowall=true
+          - -B
+          - '-DskipTests'
+          - 'clean'
+          - 'deploy'
+    workspaces:
+      - name: maven-settings
+        workspace: maven-settings
+      - name: source
+        workspace: shared-workspace
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    runAfter:
+      - build-java-app
+    params:
+      - name: IMAGE
+        value: $(params.IMAGE_REPO)/$(params.APP_NAME)
+      - name: DOCKERFILE
+        value: $(params.CONTEXT_DIR)/src/main/docker/Dockerfile.jvm 
+      - name: CONTEXT
+        value: $(params.CONTEXT_DIR)
+      - name: TLSVERIFY
+        value: 'false'
+    workspaces:
+      - name: source
+        workspace: shared-workspace
+  - name: deploy-image
+    taskRef:
+      name: deploy-template
+    runAfter:
+      - build-image
+    params:
+      - name: APPLICATION_NAME
+        value: $(params.APP_NAME)
+      - name: IMAGE_REPO
+        value: $(params.IMAGE_REPO)
+      - name: IMAGE_NAME
+        value: $(params.APP_NAME)
+      - name: IMAGE_TAG
+        value: $(params.IMAGE_TAG)
+      - name: SPRING_PROFILES_ACTIVE
+        value: $(params.APP_PROFILE)
+      - name: VERSION_LABEL
+        value: $(params.VERSION_LABEL)
+      - name: SERVICEACCOUNT_NAME
+        value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
+    workspaces:
+      - name: source
+        workspace: shared-workspace

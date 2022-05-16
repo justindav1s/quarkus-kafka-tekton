@@ -23,7 +23,7 @@ spec:
   steps:
     - name: apply
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-      workingDir: /workspace/source
+      workingDir: /workspace/source/$(params.APPLICATION_NAME)
       command: ["/bin/bash", "-c"]
       args:
         - |-
@@ -35,7 +35,13 @@ spec:
             -p SERVICE_NAME=$(params.IMAGE_NAME) \
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME)
 
-          oc new-app -f tekton/ocp-templates/spring-boot-deployment-template.yaml \
+          oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
+              --from-file=../kafka-truststore.jks
+
+          oc create secret generic $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
+              --from-file=../kafka-truststore.jks
+
+          oc new-app -f tekton/ocp-templates/boot-deployment-template.yaml \
             -p APPLICATION_NAME=$(params.APPLICATION_NAME) \
             -p IMAGE_REPO=$(params.IMAGE_REPO) \
             -p IMAGE_NAME=$(params.IMAGE_NAME) \
