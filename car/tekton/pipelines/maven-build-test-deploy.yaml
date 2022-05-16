@@ -74,7 +74,7 @@ spec:
         ls -ltr $(workspaces.storage.path)
         ls -ltr $(workspaces.truststore.path)
         find /workspace -name "*.jks"
-        cp $(workspaces.truststore.path)/user-truststore.jks $(workspaces.storage.path)
+        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
     runAfter:
       - fetch-repository
   - name: test-java-app
@@ -90,7 +90,7 @@ spec:
         value:
           - -U 
           - -q
-          - -Dkafka.ssl.truststore.location=$(workspaces.source.path)/user-truststore.jks
+          - -Dkafka.ssl.truststore.location=$(workspaces.source.path)/kafka-truststore.jks
           - -B
           - 'clean'
           - 'test'

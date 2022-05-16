@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.jnd.car.controller.CarsResourceTest" time="7.55" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.jnd.car.controller.CarsResourceTest" time="7.234" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="gopherProxySet" value="false"/>
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
@@ -17,7 +17,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/Users/justin/.sdkman/candidates/java/11.0.6-zulu/lib"/>
-    <property name="sun.java.command" value="/Users/justin/github/quarkus-kafka-tekton/car/target/surefire/surefirebooter16937688965532291878.jar /Users/justin/github/quarkus-kafka-tekton/car/target/surefire 2022-05-16T13-58-32_351-jvmRun1 surefire9765240487874218130tmp surefire_09461951790780446867tmp"/>
+    <property name="sun.java.command" value="/Users/justin/github/quarkus-kafka-tekton/car/target/surefire/surefirebooter13234994661016648318.jar /Users/justin/github/quarkus-kafka-tekton/car/target/surefire 2022-05-16T14-13-05_678-jvmRun1 surefire16530906429354298535tmp surefire_010594988705984064140tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="maven.home" value="/Users/justin/java/maven"/>
@@ -37,7 +37,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/Users/justin/github/quarkus-kafka-tekton/car/target/surefire/surefirebooter16937688965532291878.jar"/>
+    <property name="surefire.real.class.path" value="/Users/justin/github/quarkus-kafka-tekton/car/target/surefire/surefirebooter13234994661016648318.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="11.0.6+10-LTS"/>
@@ -67,22 +67,22 @@
     <property name="vertx.disableTCCL" value="true"/>
     <property name="java.vm.version" value="11.0.6+10-LTS"/>
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
-    <property name="io.netty.machineId" value="e7:ef:41:a3:be:7d:20:24"/>
+    <property name="io.netty.machineId" value="94:1e:00:46:b6:ee:d1:f5"/>
     <property name="java.class.version" value="55.0"/>
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase name="testQuotesEventStream" classname="org.jnd.car.controller.CarsResourceTest" time="1.629">
-    <system-out><![CDATA[2022-05-16 13:58:36,402 INFO  [org.jbo.threads] (main) JBoss Threads version 3.4.2.Final
-2022-05-16 13:58:37,280 INFO  [io.qua.sma.dep.processor] (build-54) Configuring the channel 'cars' to be managed by the connector 'smallrye-kafka'
-2022-05-16 13:58:37,281 INFO  [io.qua.sma.dep.processor] (build-54) Configuring the channel 'car-requests' to be managed by the connector 'smallrye-kafka'
-2022-05-16 13:58:38,216 WARN  [io.sma.rea.mes.kafka] (main) SRMSG18216: No `group.id` set in the configuration, generate a random id: 52b756f9-950f-41ad-84ad-085e7157c4ba
-2022-05-16 13:58:38,217 INFO  [io.sma.rea.mes.kafka] (main) SRMSG18229: Configured topics for channel 'cars': [cars]
-2022-05-16 13:58:38,229 INFO  [io.sma.rea.mes.kafka] (main) SRMSG18214: Key deserializer omitted, using String as default
-2022-05-16 13:58:38,738 INFO  [org.apa.kaf.com.sec.aut.AbstractLogin] (main) Successfully logged in.
-2022-05-16 13:58:39,103 INFO  [io.sma.rea.mes.kafka] (main) SRMSG18258: Kafka producer kafka-producer-car-requests, connected to Kafka brokers 'my-cluster2-kafka-bootstrap-kafka-cluster2.apps.sno.openshiftlabs.net:443', is configured to write records to 'car-requests'
-2022-05-16 13:58:39,236 INFO  [io.quarkus] (main) Quarkus 2.8.1.Final on JVM started in 3.491s. Listening on: http://localhost:8081
-2022-05-16 13:58:39,237 INFO  [io.quarkus] (main) Profile test activated. 
-2022-05-16 13:58:39,237 INFO  [io.quarkus] (main) Installed features: [cdi, kafka-client, resteasy-reactive, resteasy-reactive-jackson, smallrye-context-propagation, smallrye-health, smallrye-reactive-messaging, smallrye-reactive-messaging-kafka, vertx]
+  <testcase name="testQuotesEventStream" classname="org.jnd.car.controller.CarsResourceTest" time="1.535">
+    <system-out><![CDATA[2022-05-16 14:13:09,670 INFO  [org.jbo.threads] (main) JBoss Threads version 3.4.2.Final
+2022-05-16 14:13:10,504 INFO  [io.qua.sma.dep.processor] (build-18) Configuring the channel 'cars' to be managed by the connector 'smallrye-kafka'
+2022-05-16 14:13:10,505 INFO  [io.qua.sma.dep.processor] (build-18) Configuring the channel 'car-requests' to be managed by the connector 'smallrye-kafka'
+2022-05-16 14:13:11,486 WARN  [io.sma.rea.mes.kafka] (main) SRMSG18216: No `group.id` set in the configuration, generate a random id: 062551ab-dc74-4d2d-9172-8ceda106ec1d
+2022-05-16 14:13:11,488 INFO  [io.sma.rea.mes.kafka] (main) SRMSG18229: Configured topics for channel 'cars': [cars]
+2022-05-16 14:13:11,498 INFO  [io.sma.rea.mes.kafka] (main) SRMSG18214: Key deserializer omitted, using String as default
+2022-05-16 14:13:11,780 INFO  [org.apa.kaf.com.sec.aut.AbstractLogin] (main) Successfully logged in.
+2022-05-16 14:13:12,145 INFO  [io.sma.rea.mes.kafka] (main) SRMSG18258: Kafka producer kafka-producer-car-requests, connected to Kafka brokers 'my-cluster2-kafka-bootstrap-kafka-cluster2.apps.sno.openshiftlabs.net:443', is configured to write records to 'car-requests'
+2022-05-16 14:13:12,364 INFO  [io.quarkus] (main) Quarkus 2.8.1.Final on JVM started in 3.296s. Listening on: http://localhost:8081
+2022-05-16 14:13:12,364 INFO  [io.quarkus] (main) Profile test activated. 
+2022-05-16 14:13:12,364 INFO  [io.quarkus] (main) Installed features: [cdi, kafka-client, resteasy-reactive, resteasy-reactive-jackson, smallrye-context-propagation, smallrye-health, smallrye-reactive-messaging, smallrye-reactive-messaging-kafka, vertx]
 ]]></system-out>
   </testcase>
 </testsuite>
