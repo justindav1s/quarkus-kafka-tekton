@@ -5,18 +5,18 @@ PROJECT=connected
 APP=cars
 PROFILE=dev
 
-oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
+# oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
 
-oc create configmap ${APP}-${PROFILE}-config \
-    --from-file=../src/main/resources/config.${PROFILE}.properties \
-    -n ${PROJECT}
+# oc create configmap ${APP}-${PROFILE}-config \
+#     --from-file=../src/main/resources/config.${PROFILE}.properties \
+#     -n ${PROJECT}
 
-oc create configmap ${APP}-${PROFILE}-kafka-truststore \
-    --from-file=../truststore/kafka-truststore.jks \
-    -n ${PROJECT}
+# oc create configmap ${APP}-${PROFILE}-kafka-truststore \
+#     --from-file=../truststore/kafka-truststore.jks \
+#     -n ${PROJECT}
 
-oc label configmap ${APP}-${PROFILE}-config app=${APP}
-oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
+# oc label configmap ${APP}-${PROFILE}-config app=${APP}
+# oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
 
 cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
 apiVersion: v1

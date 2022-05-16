@@ -70,8 +70,8 @@ objects:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
-              - mountPath: /config
-                name: ${APPLICATION_NAME}-config-vol
+              - mountPath: /deployments/config
+                name: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-application-properties
               - mountPath: /deployments/truststore
                 name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore                
         dnsPolicy: ClusterFirst
@@ -81,10 +81,9 @@ objects:
         serviceAccountName: ${SERVICEACCOUNT_NAME}
         terminationGracePeriodSeconds: 30
         volumes:
-          - name: ${APPLICATION_NAME}-config-vol
-            configMap:
-              defaultMode: 420
-              name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-config           
+          - name: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-application-properties
+            secret:
+              SecretName: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-config           
           - name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
             secret:
               secretName: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore

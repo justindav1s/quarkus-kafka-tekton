@@ -37,18 +37,15 @@ spec:
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME)
 
           oc secrets link $(params.SERVICEACCOUNT_NAME) quay-dockercfg --for=pull  
-
-          oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-config \
-              --from-file=src/main/resources/config.$(params.SPRING_PROFILES_ACTIVE).properties           
-
-          oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
-              --from-file=../kafka-truststore.jks
-
+        
           oc create secret generic $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-application-properties \
               --from-file=src/main/resources/application.$(params.SPRING_PROFILES_ACTIVE).properties
 
           oc create secret generic $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
               --from-file=../kafka-truststore.jks
+
+          oc label configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-application-properties app=${APP}
+          oc label configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore app=${APP}
 
           oc new-app -f tekton/ocp-templates/deployment-template.yaml \
             -p APPLICATION_NAME=$(params.APPLICATION_NAME) \
