@@ -30,19 +30,22 @@ spec:
           echo -----------CLEANUP------------------------
           oc delete sa,deployment,service,route,configmap,secret -l app=$(params.APPLICATION_NAME)
           echo -----------DEPLOY------------------------
+
           oc new-app -f tekton/ocp-templates/ingress-template.yaml \
             -p APPLICATION_NAME=$(params.APPLICATION_NAME) \
             -p SERVICE_NAME=$(params.IMAGE_NAME) \
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME)
 
+          oc secrets link $(params.SERVICEACCOUNT_NAME) quay-dockercfg   
+
           oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-config \
-              --from-file=../src/main/resources/config.$(params.SPRING_PROFILES_ACTIVE).properties           
+              --from-file=src/main/resources/config.$(params.SPRING_PROFILES_ACTIVE).properties           
 
           oc create configmap $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
               --from-file=../kafka-truststore.jks
 
           oc create secret generic $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-application-properties \
-              --from-file=../src/main/resources/application.$(params.SPRING_PROFILES_ACTIVE).properties
+              --from-file=src/main/resources/application.$(params.SPRING_PROFILES_ACTIVE).properties
 
           oc create secret generic $(params.APPLICATION_NAME)-$(params.SPRING_PROFILES_ACTIVE)-kafka-truststore \
               --from-file=../kafka-truststore.jks
