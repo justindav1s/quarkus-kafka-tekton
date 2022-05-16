@@ -79,7 +79,7 @@ objects:
         securityContext: {}
         serviceAccount: ${SERVICEACCOUNT_NAME}
         serviceAccountName: ${SERVICEACCOUNT_NAME}
-        terminationGracePeriodSeconds: 30
+        terminationGracePeriodSeconds: 35
         volumes:
           - name: $(APPLICATION_NAME)-$(SPRING_PROFILES_ACTIVE)-application-properties
             secret:
