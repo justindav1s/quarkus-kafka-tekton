@@ -81,14 +81,13 @@ objects:
         serviceAccountName: ${SERVICEACCOUNT_NAME}
         terminationGracePeriodSeconds: 30
         volumes:
-          - configMap:
+          - name: ${APPLICATION_NAME}-config-vol
+            configMap:
               defaultMode: 420
-              name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-config
-            name: ${APPLICATION_NAME}-config-vol
-          - configMap:
-              defaultMode: 420
-              name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
-            name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
+              name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-config           
+          - name: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
+            secret:
+              secretName: ${APPLICATION_NAME}-${SPRING_PROFILES_ACTIVE}-kafka-truststore
 
 parameters:
   - description: The name for the application.

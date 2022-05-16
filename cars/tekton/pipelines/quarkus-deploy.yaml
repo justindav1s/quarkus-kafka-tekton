@@ -1,11 +1,10 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: maven-build-test-deploy
+  name: quarkus-deploy
 spec:
   workspaces:
   - name: shared-workspace
-  - name: maven-settings
   - name: truststore
   params:
   - name: APP_NAME
@@ -55,7 +54,7 @@ spec:
       value: "true"
     - name: revision
       value: $(params.GIT_BRANCH)
-  - name: list-filesystem
+  - name: configure-filesystem
     taskRef:
       name: run-script
       kind: Task
@@ -77,75 +76,11 @@ spec:
         ls -ltr $(workspaces.storage.path)
     runAfter:
       - fetch-repository
-  - name: test-java-app
-    taskRef:
-      name: maven
-      kind: ClusterTask
-    runAfter:
-      - list-filesystem
-    params:
-      - name: CONTEXT_DIR
-        value: $(params.CONTEXT_DIR)
-      - name: GOALS
-        value:
-          - -U 
-          - -q
-          - -Dkafka.ssl.truststore.location=$(workspaces.source.path)/kafka-truststore.jks
-          - -B
-          - 'clean'
-          - 'test'
-    workspaces:
-      - name: maven-settings
-        workspace: maven-settings
-      - name: source
-        workspace: shared-workspace
-  - name: build-java-app
-    taskRef:
-      name: maven
-      kind: ClusterTask
-    runAfter:
-      - test-java-app
-    params:
-      - name: CONTEXT_DIR
-        value: $(params.CONTEXT_DIR)
-      - name: GOALS
-        value:
-          - -U
-          - -q 
-          - -Dmaven.wagon.http.ssl.insecure=true 
-          - -Dmaven.wagon.http.ssl.allowall=true
-          - -B
-          - '-DskipTests'
-          - 'clean'
-          - 'deploy'
-    workspaces:
-      - name: maven-settings
-        workspace: maven-settings
-      - name: source
-        workspace: shared-workspace
-  - name: build-image
-    taskRef:
-      name: buildah
-      kind: ClusterTask
-    runAfter:
-      - build-java-app
-    params:
-      - name: IMAGE
-        value: $(params.IMAGE_REPO)/$(params.APP_NAME)
-      - name: DOCKERFILE
-        value: $(params.CONTEXT_DIR)/src/main/docker/Dockerfile.jvm 
-      - name: CONTEXT
-        value: $(params.CONTEXT_DIR)
-      - name: TLSVERIFY
-        value: 'false'
-    workspaces:
-      - name: source
-        workspace: shared-workspace
   - name: deploy-image
     taskRef:
       name: deploy-template
     runAfter:
-      - build-image
+      - configure-filesystem
     params:
       - name: APPLICATION_NAME
         value: $(params.APP_NAME)

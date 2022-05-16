@@ -1,0 +1,166 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: quarkus-build-test-deploy
+spec:
+  workspaces:
+  - name: shared-workspace
+  - name: maven-settings
+  - name: truststore
+  params:
+  - name: APP_NAME
+    type: string
+    default: inventory
+    description: name of the appto be deployed
+  - name: GIT_REPO
+    type: string
+    description: url of the git repo for the code of deployment
+  - name: GIT_BRANCH
+    type: string
+    description: revision to be used from repo of the code for deployment
+    default: master
+  - name: APP_PROFILE
+    description: The Spring Active Profile to use for building and testing the application.
+    default: dev       
+  - name: CONTEXT_DIR
+    type: string
+    default: ''
+    description: folder in git repo where source is
+  - name: IMAGE_REPO
+    type: string
+    description: repo for container image
+    default: quay.io/justindav1s
+  - name: IMAGE_TAG
+    type: string
+    description: tag for container image
+    default: latest
+  - name: VERSION_LABEL
+    type: string
+    description: version label for pod 
+    default: v1
+  tasks:
+  - name: fetch-repository
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    - name: output
+      workspace: shared-workspace
+    params:
+    - name: url
+      value: $(params.GIT_REPO)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    - name: revision
+      value: $(params.GIT_BRANCH)
+  - name: list-filesystem
+    taskRef:
+      name: run-script
+      kind: Task
+    workspaces:
+    - name: storage
+      workspace: shared-workspace
+    - name: truststore
+      workspace: truststore
+    params:
+    - name: script
+      value: |
+        #!/usr/bin/env bash
+        set -xe
+        echo "Script running in $(workspaces.storage.path)"
+        echo "fixing  permissions....."
+        chmod -R 777 $(workspaces.storage.path)
+        echo "making kafka-trustore.jks available to build/test"
+        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
+        ls -ltr $(workspaces.storage.path)
+    runAfter:
+      - fetch-repository
+  - name: test-java-app
+    taskRef:
+      name: maven
+      kind: ClusterTask
+    runAfter:
+      - list-filesystem
+    params:
+      - name: CONTEXT_DIR
+        value: $(params.CONTEXT_DIR)
+      - name: GOALS
+        value:
+          - -U 
+          - -q
+          - -Dkafka.ssl.truststore.location=$(workspaces.source.path)/kafka-truststore.jks
+          - -B
+          - 'clean'
+          - 'test'
+    workspaces:
+      - name: maven-settings
+        workspace: maven-settings
+      - name: source
+        workspace: shared-workspace
+  - name: build-java-app
+    taskRef:
+      name: maven
+      kind: ClusterTask
+    runAfter:
+      - test-java-app
+    params:
+      - name: CONTEXT_DIR
+        value: $(params.CONTEXT_DIR)
+      - name: GOALS
+        value:
+          - -U
+          - -q 
+          - -Dmaven.wagon.http.ssl.insecure=true 
+          - -Dmaven.wagon.http.ssl.allowall=true
+          - -B
+          - '-DskipTests'
+          - 'clean'
+          - 'deploy'
+    workspaces:
+      - name: maven-settings
+        workspace: maven-settings
+      - name: source
+        workspace: shared-workspace
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    runAfter:
+      - build-java-app
+    params:
+      - name: IMAGE
+        value: $(params.IMAGE_REPO)/$(params.APP_NAME)
+      - name: DOCKERFILE
+        value: $(params.CONTEXT_DIR)/src/main/docker/Dockerfile.jvm 
+      - name: CONTEXT
+        value: $(params.CONTEXT_DIR)
+      - name: TLSVERIFY
+        value: 'false'
+    workspaces:
+      - name: source
+        workspace: shared-workspace
+  - name: deploy-image
+    taskRef:
+      name: deploy-template
+    runAfter:
+      - build-image
+    params:
+      - name: APPLICATION_NAME
+        value: $(params.APP_NAME)
+      - name: IMAGE_REPO
+        value: $(params.IMAGE_REPO)
+      - name: IMAGE_NAME
+        value: $(params.APP_NAME)
+      - name: IMAGE_TAG
+        value: $(params.IMAGE_TAG)
+      - name: SPRING_PROFILES_ACTIVE
+        value: $(params.APP_PROFILE)
+      - name: VERSION_LABEL
+        value: $(params.VERSION_LABEL)
+      - name: SERVICEACCOUNT_NAME
+        value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
+    workspaces:
+      - name: source
+        workspace: shared-workspace

@@ -31,11 +31,14 @@ spec:
       storage: 500Mi
 EOF
 
+oc apply -f tasks/run-script-task.yaml
+oc apply -f tasks/oc-deploy-template.yaml
+oc apply -f pipelines/quarkus-deploy.yaml
 
+oc delete pvc ${APP}-${PROFILE}-pipeline-pvc
 
-tkn pipeline start maven-build-test-deploy \
+tkn pipeline start quarkus-deploy \
     -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \
-    -w name=maven-settings,config=custom-maven-settings \
     -w name=truststore,config=${APP}-${PROFILE}-kafka-truststore \
     -p APP_NAME=${APP} \
     -p GIT_REPO=https://github.com/justindav1s/quarkus-kafka-tekton.git \

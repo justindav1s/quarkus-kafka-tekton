@@ -1,3 +1,5 @@
 #!/bin/bash
 
-curl -d "@data.txt" -X POST http://localhost:3000/data
+curl -X GET https://cars-connected.apps.sno.openshiftlabs.net/cars/health
+
+curl -d "@car.json" -X POST https://cars-connected.apps.sno.openshiftlabs.net/cars/request

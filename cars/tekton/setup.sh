@@ -27,6 +27,3 @@ oc secrets link pipeline quay-dockercfg -n ${PROJECT}
 oc secrets link deployer quay-dockercfg --for=pull -n ${PROJECT}
 
 oc create configmap custom-maven-settings --from-file=settings.xml
-oc apply -f tasks/run-script-task.yaml
-oc apply -f tasks/oc-deploy-template.yaml
-oc apply -f pipelines/maven-build-test-deploy.yaml
