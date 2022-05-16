@@ -5,24 +5,26 @@ PROJECT=connected
 APP=cars
 PROFILE=dev
 
-# oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
+oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
 
-# oc create configmap ${APP}-${PROFILE}-config \
-#     --from-file=../src/main/resources/config.${PROFILE}.properties \
-#     -n ${PROJECT}
+oc create configmap ${APP}-${PROFILE}-config \
+    --from-file=../src/main/resources/config.${PROFILE}.properties \
+    -n ${PROJECT}
 
-# oc create configmap ${APP}-${PROFILE}-kafka-truststore \
-#     --from-file=../truststore/kafka-truststore.jks \
-#     -n ${PROJECT}
+oc create configmap ${APP}-${PROFILE}-kafka-truststore \
+    --from-file=../truststore/kafka-truststore.jks \
+    -n ${PROJECT}
 
-# oc label configmap ${APP}-${PROFILE}-config app=${APP}
-# oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
+oc label configmap ${APP}-${PROFILE}-config app=${APP}
+oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
 
 cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ${APP}-${PROFILE}-pipeline-pvc
+  labels:
+      app: ${APP}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -35,7 +37,7 @@ oc apply -f tasks/run-script-task.yaml
 oc apply -f tasks/oc-deploy-template.yaml
 oc apply -f pipelines/quarkus-deploy.yaml
 
-oc delete pvc ${APP}-${PROFILE}-pipeline-pvc
+oc delete pvc -l app=${APP}
 
 tkn pipeline start quarkus-deploy \
     -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \

@@ -9,7 +9,7 @@ objects:
   metadata:
     annotations:
     labels:
-      app: ${APPLICATION_NAME}
+      app: ${APP_NAME}
     name: ${SERVICEACCOUNT_NAME}
 
 - apiVersion: v1
@@ -17,7 +17,7 @@ objects:
   metadata:
     annotations:
     labels:
-      app: ${APPLICATION_NAME}
+      app: ${APP_NAME}
     name: ${SERVICE_NAME}
   spec:
     ports:
@@ -26,20 +26,20 @@ objects:
         protocol: TCP
         targetPort: 8080
     selector:
-      app: ${APPLICATION_NAME}
+      app: ${APP_NAME}
     sessionAffinity: None
     type: ClusterIP
 
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
-    name: ${APPLICATION_NAME}
+    name: ${APP_NAME}
     labels:
-      app: ${APPLICATION_NAME}
+      app: ${APP_NAME}
   spec:
     to:
       kind: Service
-      name: ${APPLICATION_NAME}
+      name: ${APP_NAME}
       weight: 100
     port:
       targetPort: http
@@ -51,7 +51,7 @@ objects:
 
 parameters:
   - description: The name for the application.
-    name: APPLICATION_NAME
+    name: APP_NAME
     required: true
     value: "inventory"
   - description: The name for the application.
