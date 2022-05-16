@@ -71,7 +71,7 @@ objects:
             terminationMessagePolicy: File
             volumeMounts:
               - mountPath: /deployments/config
-                name: $(APP_NAME)-$(PROFILE)-application-properties
+                name: ${APP_NAME}-${PROFILE}-application-properties
               - mountPath: /deployments/truststore
                 name: ${APP_NAME}-${PROFILE}-kafka-truststore                
         dnsPolicy: ClusterFirst
@@ -81,9 +81,9 @@ objects:
         serviceAccountName: ${SERVICEACCOUNT_NAME}
         terminationGracePeriodSeconds: 35
         volumes:
-          - name: $(APP_NAME)-$(PROFILE)-application-properties
+          - name: ${APP_NAME}-${PROFILE}-application-properties
             secret:
-              secretName: $(APP_NAME)-$(PROFILE)-config           
+              secretName: ${APP_NAME}-${PROFILE}-application-properties
           - name: ${APP_NAME}-${PROFILE}-kafka-truststore
             secret:
               secretName: ${APP_NAME}-${PROFILE}-kafka-truststore
