@@ -25,9 +25,7 @@ spec:
     - name: VERSION_LABEL
       type: string
     - name: SERVICEACCOUNT_NAME
-      type: string
-    - name: CONTEXT_DIR
-      type: string      
+      type: string    
   steps:
     - name: apply
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest

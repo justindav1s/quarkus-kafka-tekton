@@ -7,6 +7,8 @@ APP_DIR=${APPS_DIR}/${CONTEXT}
 APP=cars-native
 PROFILE=dev
 
+oc project ${CICD_PROJECT}
+
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
 
 oc create configmap ${APP}-${PROFILE}-config \
@@ -17,8 +19,8 @@ oc create configmap ${APP}-${PROFILE}-kafka-truststore \
     --from-file=../${APP_DIR}/truststore/kafka-truststore.jks \
     -n ${CICD_PROJECT}
 
-oc label configmap ${APP}-${PROFILE}-config app=${APP}
-oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
+oc label configmap ${APP}-${PROFILE}-config app=${APP} -n ${CICD_PROJECT}
+oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP} -n ${CICD_PROJECT}
 
 cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
 apiVersion: v1

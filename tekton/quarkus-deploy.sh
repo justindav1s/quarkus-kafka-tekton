@@ -10,11 +10,11 @@ oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
 
 oc create configmap ${APP}-${PROFILE}-config \
     --from-file=../src/main/resources/config.${PROFILE}.properties \
-    -n ${PROJECT}
+    -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-kafka-truststore \
     --from-file=../truststore/kafka-truststore.jks \
-    -n ${PROJECT}
+    -n ${CICD_PROJECT}
 
 oc label configmap ${APP}-${PROFILE}-config app=${APP}
 oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
