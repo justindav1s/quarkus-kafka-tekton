@@ -5,7 +5,6 @@ metadata:
 spec:
   workspaces:
   - name: shared-workspace
-  - name: truststore
   params:
   - name: APP_NAME
     type: string
