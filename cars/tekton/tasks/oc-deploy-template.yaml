@@ -60,7 +60,7 @@ spec:
 
           oc new-app -f tekton/ocp-templates/deployment-template.yaml \
             -p APP_NAME=$(params.APP_NAME) \
-            -p CONTEXT=$(params.CONTEXT_DIR)
+            -p CONTEXT=$(params.CONTEXT_DIR) \
             -p IMAGE_REPO=$(params.IMAGE_REPO) \
             -p IMAGE_NAME=$(params.IMAGE_NAME) \
             -p IMAGE_TAG=$(params.IMAGE_TAG) \

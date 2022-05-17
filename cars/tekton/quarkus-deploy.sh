@@ -3,6 +3,7 @@
 
 PROJECT=connected
 APP=cars
+CONTEXT=${APP}
 PROFILE=dev
 
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
@@ -43,6 +44,7 @@ tkn pipeline start quarkus-deploy \
     -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \
     -w name=truststore,config=${APP}-${PROFILE}-kafka-truststore \
     -p APP_NAME=${APP} \
+    -p CONTEXT_DIR=${CONTEXT} \
     -p GIT_REPO=https://github.com/justindav1s/quarkus-kafka-tekton.git \
     -p GIT_BRANCH=main \
     -p APP_PROFILE=${PROFILE} \

@@ -1,5 +1,12 @@
 #!/bin/bash
 
-curl -X GET https://cars-connected.apps.sno.openshiftlabs.net/cars/health
+URL=https://cars-native-connected.apps.sno.openshiftlabs.net
+#URL=https://cars-connected.apps.sno.openshiftlabs.net
 
-curl -d "@car.json" -X POST https://cars-connected.apps.sno.openshiftlabs.net/cars/request
+echo Using URL : ${URL}
+
+curl -X GET $URL/cars/health
+echo
+curl -d "@car.json" -X POST $URL/cars/request
+echo
+curl -X GET $URL/q/openapi

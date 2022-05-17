@@ -85,7 +85,7 @@ spec:
     params:
       - name: APP_NAME
         value: $(params.APP_NAME)
-       - name: CONTEXT_DIR
+      - name: CONTEXT_DIR
         value: $(params.CONTEXT_DIR)
       - name: IMAGE_REPO
         value: $(params.IMAGE_REPO)
