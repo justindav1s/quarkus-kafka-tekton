@@ -12,6 +12,12 @@ spec:
     type: string
     default: inventory
     description: name of the appto be deployed
+  - name: APP_DIR
+    type: string  
+  - name: HTTP_CONTEXT
+    type: string  
+  - name: DEPLOY_PROJECT
+    type: string     
   - name: GIT_REPO
     type: string
     description: url of the git repo for the code of deployment
@@ -145,10 +151,16 @@ spec:
     taskRef:
       name: deploy-template
     runAfter:
-      - build-image
+      - configure-filesystem
     params:
       - name: APP_NAME
         value: $(params.APP_NAME)
+      - name: APP_DIR
+        value: $(params.APP_DIR)        
+      - name: HTTP_CONTEXT
+        value: $(params.HTTP_CONTEXT)
+      - name: DEPLOY_PROJECT
+        value: $(params.DEPLOY_PROJECT)
       - name: IMAGE_REPO
         value: $(params.IMAGE_REPO)
       - name: IMAGE_NAME

@@ -55,4 +55,5 @@ tkn pipeline start quarkus-deploy \
     -p APP_PROFILE=${PROFILE} \
     -p IMAGE_REPO=${QUAYIO_HOST}/${QUAYIO_USER} \
     --use-param-defaults \
-    --showlog
+    --showlog \ 
+    -n ${CICD_PROJECT}

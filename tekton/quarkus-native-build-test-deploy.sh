@@ -50,4 +50,5 @@ tkn pipeline start quarkus-native-build-test-deploy \
     -p CONTEXT_DIR=${CONTEXT} \
     -p IMAGE_REPO=${QUAYIO_HOST}/${QUAYIO_USER} \
     --use-param-defaults \
-    --showlog
+    --showlog \
+     -n ${CICD_PROJECT}
