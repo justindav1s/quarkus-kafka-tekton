@@ -23,7 +23,7 @@ spec:
   steps:
     - name: apply
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-      workingDir: /workspace/source/$(params.APP_NAME)
+      workingDir: /workspace/source/cars
       command: ["/bin/bash", "-c"]
       args:
         - |-
