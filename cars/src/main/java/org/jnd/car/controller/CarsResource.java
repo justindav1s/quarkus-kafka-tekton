@@ -14,6 +14,22 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import io.smallrye.mutiny.Multi;
 
+@OpenAPIDefinition(
+    tags = {
+            @Tag(name="car", description="Car operations."),
+    },
+    info = @Info(
+        title="Connected Car API",
+        version = "1.0.1",
+        contact = @Contact(
+            name = "Car API Support",
+            url = "http://exampleurl.com/contact",
+            email = "techsupport@example.com"),
+        license = @License(
+            name = "Apache 2.0",
+            url = "https://www.apache.org/licenses/LICENSE-2.0.html"))
+)
+
 @Path("/cars")
 public class CarsResource {
 
