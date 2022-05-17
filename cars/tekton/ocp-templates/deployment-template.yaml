@@ -49,7 +49,7 @@ objects:
                 memory: 256Mi
             livenessProbe:
               httpGet:
-                path: /${APP_NAME}/health
+                path: /${CONTEXT}/health
                 port: 8080
                 scheme: HTTP
               initialDelaySeconds: 20
@@ -59,7 +59,7 @@ objects:
               failureThreshold: 3
             readinessProbe:
               httpGet:
-                path: /${APP_NAME}/health
+                path: /${CONTEXT}/health
                 port: 8080
                 scheme: HTTP
               initialDelaySeconds: 20
@@ -93,6 +93,10 @@ parameters:
     name: APP_NAME
     required: true
     value: "inventory"
+  - description: The name for the application.
+    name: CONTEXT
+    required: true
+    value: "inventory"    
   - description: The name for the application image.
     name: IMAGE_REPO
     required: true
