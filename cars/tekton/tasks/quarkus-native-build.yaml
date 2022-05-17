@@ -12,7 +12,7 @@ spec:
       type: string
   steps:
     - name: apply
-      image: quay.io/justindav1s/quarkus-native-builder:rh-openjdk11
+      image: quay.io/justindav1s/quarkus-native-builder:gcr-mvn
       workingDir: /workspace/shared-workspace/$(params.APP_NAME)
       command: ["/bin/bash", "-c"]
       args:
