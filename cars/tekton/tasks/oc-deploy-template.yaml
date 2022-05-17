@@ -29,7 +29,16 @@ spec:
         - |-
           echo -----------CLEANUP------------------------
           oc delete sa,deployment,service,route,configmap,secret -l app=$(params.APP_NAME)
+          echo -----------INPUTS------------------------
+          echo APP_NAME: $(params.APP_NAME)
+          echo IMAGE_REPO: $(params.IMAGE_REPO)
+          echo IMAGE_NAME: $(params.IMAGE_NAME)
+          echo IMAGE_TAG: $(params.IMAGE_TAG)
+          echo PROFILE: $(params.PROFILE)
+          echo VERSION_LABEL: $(params.APP_NAME)
+          echo SERVICEACCOUNT_NAME: $(params.APP_NAME)
           echo -----------DEPLOY------------------------
+
 
           oc new-app -f tekton/ocp-templates/ingress-template.yaml \
             -p APP_NAME=$(params.APP_NAME) \

@@ -20,10 +20,7 @@ spec:
     default: master
   - name: APP_PROFILE
     description: The Spring Active Profile to use for building and testing the application.
-    default: dev       
-  - name: CONTEXT_DIR
-    type: string
-    default: ''
+    default: dev
     description: folder in git repo where source is
   - name: IMAGE_REPO
     type: string
