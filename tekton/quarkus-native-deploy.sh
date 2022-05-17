@@ -1,7 +1,9 @@
 #!/bin/bash
 
-
 PROJECT=connected
+
+APPS_DIR=apps
+APP_DIR=${APPS_DIR}/cars
 APP=cars-native
 CONTEXT=cars
 PROFILE=dev
@@ -9,11 +11,11 @@ PROFILE=dev
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
 
 oc create configmap ${APP}-${PROFILE}-config \
-    --from-file=../src/main/resources/config.${PROFILE}.properties \
+    --from-file=../${APP_DIR}/src/main/resources/config.${PROFILE}.properties \
     -n ${PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-kafka-truststore \
-    --from-file=../truststore/kafka-truststore.jks \
+    --from-file=../${APP_DIR}/truststore/kafka-truststore.jks \
     -n ${PROJECT}
 
 oc label configmap ${APP}-${PROFILE}-config app=${APP}

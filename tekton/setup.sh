@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-PROJECT=connected
+PROJECT=connected-cicd
 
 
 echo Deleting $PROJECT
