@@ -20,10 +20,12 @@ spec:
       type: string
     - name: SERVICEACCOUNT_NAME
       type: string
+    - name: CONTEXT_DIR
+      type: string      
   steps:
     - name: apply
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-      workingDir: /workspace/source/cars
+      workingDir: /workspace/source/$(params.CONTEXT_DIR)
       command: ["/bin/bash", "-c"]
       args:
         - |-
@@ -58,6 +60,7 @@ spec:
 
           oc new-app -f tekton/ocp-templates/deployment-template.yaml \
             -p APP_NAME=$(params.APP_NAME) \
+            -p CONTEXT=$(params.CONTEXT_DIR)
             -p IMAGE_REPO=$(params.IMAGE_REPO) \
             -p IMAGE_NAME=$(params.IMAGE_NAME) \
             -p IMAGE_TAG=$(params.IMAGE_TAG) \
