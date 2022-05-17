@@ -1,0 +1,9 @@
+# Builder Image
+
+https://medium.com/p/a8c9a4e8400
+
+# GRAAL
+
+https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-19.3.0
+
+https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-19.3.0/graalvm-ce-java11-linux-aarch64-19.3.0.tar.gz

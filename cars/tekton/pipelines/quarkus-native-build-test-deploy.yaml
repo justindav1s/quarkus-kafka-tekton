@@ -114,6 +114,7 @@ spec:
           - -B
           - '-DskipTests'
           - '-Dnative'
+          - '-Dquarkus.package.type=native'
           - 'clean'
           - 'package'
     workspaces:
