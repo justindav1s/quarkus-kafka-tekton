@@ -22,7 +22,7 @@ import io.smallrye.mutiny.Multi;
         title="Connected Car API",
         version = "1.0.1",
         contact = @Contact(
-            name = "Car API Support",
+            name = "Connected Car API Support",
             url = "http://exampleurl.com/contact",
             email = "techsupport@example.com"),
         license = @License(
