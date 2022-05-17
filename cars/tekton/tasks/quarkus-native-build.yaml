@@ -13,11 +13,10 @@ spec:
   steps:
     - name: apply
       image: quay.io/justindav1s/quarkus-native-builder:latest
-      workingDir: /workspace/source/$(params.APP_NAME)
+      workingDir: /workspace/shared-workspace/$(params.APP_NAME)
       command: ["/bin/bash", "-c"]
       args:
         - |-
           echo -----------Build------------------------
-          chmod -R 777 *
           mvn -U -B -s tekton/settings.xml '-DskipTests' '-Dnative'  '-Dquarkus.package.type=native' 'clean' 'package'
           echo -------------DONE-------------------
