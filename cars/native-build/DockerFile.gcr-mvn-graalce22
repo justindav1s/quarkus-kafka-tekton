@@ -1,0 +1,15 @@
+FROM gcr.io/cloud-builders/mvn@sha256:57523fc43394d6d9d2414ee8d1c85ed7a13460cbb268c3cd16d28cfb3859e641
+
+RUN microdnf install curl wget tar ca-certificates gcc gcc-c++ glibc-devel libstdc++-devel libstdc++ zlib zlib-devel \
+    && microdnf update \
+    && microdnf clean all
+
+WORKDIR /opt
+RUN wget https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-linux-amd64-22.1.0.tar.gz >/dev/null 2>&1
+RUN tar zxvf graalvm-ce-java11-linux-amd64-22.1.0.tar.gz && rm -rf graalvm-ce-java11-linux-amd64-22.1.0.tar.gz
+ENV GRAALVM_HOME=/opt/graalvm-ce-java11-22.1.0
+ENV PATH=$GRAALVM_HOME/bin:$PATH
+RUN gu install native-image
+
+WORKDIR /
+

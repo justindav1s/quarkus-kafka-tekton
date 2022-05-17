@@ -3,9 +3,9 @@
 IMAGE=quarkus-native-builder
 REGISTRY_HOST=quay.io
 REPO=justindav1s
-VERSION=latest
+VERSION=gcr-mvn-mandrel22
 
-docker build -t $IMAGE - < Dockerfile.graal2
+DOCKER_BUILDKIT=0 docker build -t $IMAGE - < Dockerfile.gcr-mvn-mandrel22
 
 TAG=$REGISTRY_HOST/$REPO/$IMAGE:$VERSION
 
