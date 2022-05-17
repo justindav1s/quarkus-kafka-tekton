@@ -91,7 +91,7 @@ spec:
       - list-filesystem
     params:
       - name: CONTEXT_DIR
-        value: $(params.CONTEXT_DIR)
+        value: $(params.APP_DIR)
       - name: GOALS
         value:
           - -U 
@@ -113,7 +113,7 @@ spec:
       - test-java-app
     params:
       - name: CONTEXT_DIR
-        value: $(params.CONTEXT_DIR)
+        value: $(params.APP_DIR)
       - name: GOALS
         value:
           - -U
@@ -139,9 +139,9 @@ spec:
       - name: IMAGE
         value: $(params.IMAGE_REPO)/$(params.APP_NAME)
       - name: DOCKERFILE
-        value: $(params.CONTEXT_DIR)/src/main/docker/Dockerfile.jvm 
+        value: $(params.APP_DIR)/src/main/docker/Dockerfile.jvm 
       - name: CONTEXT
-        value: $(params.CONTEXT_DIR)
+        value: $(params.APP_DIR)
       - name: TLSVERIFY
         value: 'false'
     workspaces:
@@ -151,7 +151,7 @@ spec:
     taskRef:
       name: deploy-template
     runAfter:
-      - configure-filesystem
+      - build-image
     params:
       - name: APP_NAME
         value: $(params.APP_NAME)
