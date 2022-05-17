@@ -1,23 +1,26 @@
 #!/bin/bash
 
+. ../env.sh
 
-PROJECT=connected
+HTTP_CONTEXT=cars
+APP_DIR=${APPS_DIR}/${HTTP_CONTEXT}
 APP=cars
-CONTEXT=${APP}
 PROFILE=dev
+
+oc project ${CICD_PROJECT}
 
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
 
 oc create configmap ${APP}-${PROFILE}-config \
-    --from-file=../src/main/resources/config.${PROFILE}.properties \
+    --from-file=../${APP_DIR}/src/main/resources/config.${PROFILE}.properties \
     -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-kafka-truststore \
-    --from-file=../truststore/kafka-truststore.jks \
+    --from-file=../${APP_DIR}/truststore/kafka-truststore.jks \
     -n ${CICD_PROJECT}
 
-oc label configmap ${APP}-${PROFILE}-config app=${APP}
-oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
+oc label configmap ${APP}-${PROFILE}-config app=${APP} -n ${CICD_PROJECT}
+oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP} -n ${CICD_PROJECT}
 
 cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
 apiVersion: v1
@@ -44,7 +47,9 @@ tkn pipeline start quarkus-deploy \
     -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \
     -w name=truststore,config=${APP}-${PROFILE}-kafka-truststore \
     -p APP_NAME=${APP} \
-    -p CONTEXT_DIR=${CONTEXT} \
+    -p APP_DIR=${APP_DIR} \
+    -p HTTP_CONTEXT=${HTTP_CONTEXT} \
+    -p DEPLOY_PROJECT=${DEPLOY_PROJECT} \
     -p GIT_REPO=https://github.com/justindav1s/quarkus-kafka-tekton.git \
     -p GIT_BRANCH=main \
     -p APP_PROFILE=${PROFILE} \
