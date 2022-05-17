@@ -101,20 +101,44 @@ spec:
         workspace: shared-workspace
   - name: build-native-app
     taskRef:
-      name: quarkus-native-build
-      kind: Task
+      name: maven
+      kind: ClusterTask
     runAfter:
       - test-java-app
     params:
-      - name: APP_NAME
-        value: $(params.APP_NAME)
+      - name: CONTEXT_DIR
+        value: $(params.CONTEXT_DIR)
+      - name: MAVEN_IMAGE
+        value: quay.io/justindav1s/quarkus-native-builder:gcr-mvn
+      - name: GOALS
+        value:
+          - -U 
+          - -B
+          - '-DskipTests' 
+          - '-Dnative'  
+          - '-Dquarkus.package.type=native' 
+          - 'package'
     workspaces:
       - name: maven-settings
         workspace: maven-settings
-      - name: shared-workspace
-        workspace: shared-workspace
-      - name: truststore
-        workspace: truststore        
+      - name: source
+        workspace: shared-workspace        
+  # - name: build-native-app
+  #   taskRef:
+  #     name: quarkus-native-build
+  #     kind: Task
+  #   runAfter:
+  #     - test-java-app
+  #   params:
+  #     - name: APP_NAME
+  #       value: $(params.APP_NAME)
+  #   workspaces:
+  #     - name: maven-settings
+  #       workspace: maven-settings
+  #     - name: shared-workspace
+  #       workspace: shared-workspace
+  #     - name: truststore
+  #       workspace: truststore        
   - name: build-image
     taskRef:
       name: buildah
