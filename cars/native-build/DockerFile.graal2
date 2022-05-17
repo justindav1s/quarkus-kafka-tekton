@@ -16,5 +16,5 @@ ENV GRAALVM_HOME=/opt/graalvm-ce-java11-20.0.0
 ENV PATH=$GRAALVM_HOME/bin:$M2_HOME/bin:$PATH
 RUN gu install native-image
 # RUN yum -y install gcc gcc-c++ glibc-devel libstdc++-devel libstdc++ zlib zlib-devel
-RUN chown -R 1001:0 $HOME && chmod -R g+rw $HOME
+WORKDIR /
 USER 1001

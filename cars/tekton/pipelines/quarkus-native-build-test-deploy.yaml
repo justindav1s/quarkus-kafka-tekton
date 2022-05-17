@@ -109,7 +109,7 @@ spec:
       - name: CONTEXT_DIR
         value: $(params.CONTEXT_DIR)
       - name: MAVEN_IMAGE
-        value: quay.io/justindav1s/quarkus-native-builder:gcr-mvn
+        value: quay.io/justindav1s/quarkus-native-builder:latest
       - name: GOALS
         value:
           - -U 
