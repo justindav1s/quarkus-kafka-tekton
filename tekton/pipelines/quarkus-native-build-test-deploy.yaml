@@ -139,7 +139,7 @@ spec:
       - name: IMAGE
         value: $(params.IMAGE_REPO)/$(params.APP_NAME)
       - name: DOCKERFILE
-        value: $(params.CONTEXT_DIR)/src/main/docker/Dockerfile.native 
+        value: $(params.APP_DIR)/src/main/docker/Dockerfile.native 
       - name: CONTEXT
         value: $(params.APP_DIR)
       - name: TLSVERIFY
