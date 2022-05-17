@@ -1,12 +1,12 @@
 #!/bin/bash
 
-
 . ../env.sh
 
 APP=cars-native
 CONTEXT=cars
 PROFILE=dev
 HTTP_CONTEXT=cars
+APP_DIR=${APPS_DIR}/${CONTEXT}
 
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore -n ${CICD_PROJECT}
 
@@ -45,10 +45,13 @@ tkn pipeline start quarkus-native-build-test-deploy \
     -w name=maven-settings,config=custom-maven-settings \
     -w name=truststore,config=${APP}-${PROFILE}-kafka-truststore \
     -p APP_NAME=${APP} \
+    -p APP_DIR=${APP_DIR} \
+    -p HTTP_CONTEXT=${HTTP_CONTEXT} \
+    -p DEPLOY_PROJECT=${DEPLOY_PROJECT} \    
     -p GIT_REPO=https://github.com/justindav1s/quarkus-kafka-tekton.git \
     -p GIT_BRANCH=main \
     -p APP_PROFILE=${PROFILE} \
-    -p CONTEXT_DIR=${CONTEXT} \
+    -p CONTEXT_DIR=${HTTP_CONTEXT} \
     -p IMAGE_REPO=${QUAYIO_HOST}/${QUAYIO_USER} \
     --use-param-defaults \
     --showlog \

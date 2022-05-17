@@ -91,7 +91,7 @@ spec:
       - list-filesystem
     params:
       - name: CONTEXT_DIR
-        value: $(params.CONTEXT_DIR)
+        value: $(params.APP_DIR)
       - name: GOALS
         value:
           - -U 
@@ -113,7 +113,7 @@ spec:
       - test-java-app
     params:
       - name: CONTEXT_DIR
-        value: $(params.CONTEXT_DIR)
+        value: $(params.APP_DIR)
       - name: MAVEN_IMAGE
         value: quay.io/justindav1s/quarkus-native-builder:gcr-mvn-graalce22
       - name: GOALS
@@ -141,7 +141,7 @@ spec:
       - name: DOCKERFILE
         value: $(params.CONTEXT_DIR)/src/main/docker/Dockerfile.native 
       - name: CONTEXT
-        value: $(params.CONTEXT_DIR)
+        value: $(params.APP_DIR)
       - name: TLSVERIFY
         value: 'false'
     workspaces:
