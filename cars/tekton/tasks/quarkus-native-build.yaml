@@ -19,5 +19,5 @@ spec:
         - |-
           echo -----------Build------------------------
           chmod -R 777 *
-          mvn -U -B '-DskipTests' '-Dnative'  '-Dquarkus.package.type=native' 'clean' 'package'
+          mvn -U -B -s tekton/settings.xml '-DskipTests' '-Dnative'  '-Dquarkus.package.type=native' 'clean' 'package'
           echo -------------DONE-------------------
