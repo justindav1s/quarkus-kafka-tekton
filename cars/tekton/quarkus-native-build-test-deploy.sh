@@ -33,6 +33,7 @@ EOF
 
 oc apply -f tasks/run-script-task.yaml
 oc apply -f tasks/oc-deploy-template.yaml
+oc apply -f tasks/quarkus-native-build.yaml
 oc apply -f pipelines/quarkus-native-build-test-deploy.yaml
 
 oc delete PipelineRun -l tekton.dev/pipeline=quarkus-deploy

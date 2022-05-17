@@ -99,35 +99,28 @@ spec:
         workspace: maven-settings
       - name: source
         workspace: shared-workspace
-  - name: build-java-app
+  - name: build-native-app
     taskRef:
-      name: maven
-      kind: ClusterTask
+      name: quarkus-native-build
+      kind: Task
     runAfter:
       - test-java-app
     params:
-      - name: CONTEXT_DIR
-        value: $(params.CONTEXT_DIR)
-      - name: GOALS
-        value:
-          - -U
-          - -B
-          - '-DskipTests'
-          - '-Dnative'
-          - '-Dquarkus.package.type=native'
-          - 'clean'
-          - 'package'
+      - name: APP_NAME
+        value: $(params.APP_NAME)
     workspaces:
       - name: maven-settings
         workspace: maven-settings
       - name: source
         workspace: shared-workspace
+      - name: truststore
+        workspace: truststore        
   - name: build-image
     taskRef:
       name: buildah
       kind: ClusterTask
     runAfter:
-      - build-java-app
+      - build-native-app
     params:
       - name: IMAGE
         value: $(params.IMAGE_REPO)/$(params.APP_NAME)-native
