@@ -30,6 +30,13 @@ oc create secret docker-registry quay-dockercfg \
   --docker-email=${QUAYIO_EMAIL} \
   -n ${CICD_PROJECT}
 
+oc create secret docker-registry quay-dockercfg \
+  --docker-server=${QUAYIO_HOST} \
+  --docker-username=${QUAYIO_USER} \
+  --docker-password=${QUAYIO_PASSWORD} \
+  --docker-email=${QUAYIO_EMAIL} \
+  -n ${DEPLOY_PROJECT}
+
 oc secrets link pipeline quay-dockercfg -n ${CICD_PROJECT}
 oc secrets link deployer quay-dockercfg --for=pull -n ${CICD_PROJECT}
 oc create configmap custom-maven-settings --from-file=settings.xml -n ${CICD_PROJECT}

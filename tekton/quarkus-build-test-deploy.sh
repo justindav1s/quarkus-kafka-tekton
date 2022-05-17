@@ -5,6 +5,7 @@
 APP=cars
 PROFILE=dev
 APP_DIR=${APPS_DIR}/${APP}
+HTTP_CONTEXT=cars
 
 oc project ${CICD_PROJECT}
 

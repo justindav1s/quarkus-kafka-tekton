@@ -1,23 +1,25 @@
 #!/bin/bash
 
 
-PROJECT=connected
+. ../env.sh
+
 APP=cars-native
 CONTEXT=cars
 PROFILE=dev
+HTTP_CONTEXT=cars
 
-oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
+oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-config \
     --from-file=../src/main/resources/config.${PROFILE}.properties \
-    -n ${PROJECT}
+    -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-kafka-truststore \
     --from-file=../truststore/kafka-truststore.jks \
-    -n ${PROJECT}
+    -n ${CICD_PROJECT}
 
-oc label configmap ${APP}-${PROFILE}-config app=${APP}
-oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP}
+oc label configmap ${APP}-${PROFILE}-config app=${APP} -n ${CICD_PROJECT}
+oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP} -n ${CICD_PROJECT}
 
 cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
 apiVersion: v1
@@ -32,10 +34,9 @@ spec:
       storage: 500Mi
 EOF
 
-oc apply -f tasks/run-script-task.yaml
-oc apply -f tasks/oc-deploy-template.yaml
-oc apply -f tasks/quarkus-native-build.yaml
-oc apply -f pipelines/quarkus-native-build-test-deploy.yaml
+oc apply -f tasks/run-script-task.yaml -n ${CICD_PROJECT}
+oc apply -f tasks/oc-deploy-template.yaml -n ${CICD_PROJECT}
+oc apply -f pipelines/quarkus-native-build-test-deploy.yaml -n ${CICD_PROJECT}
 
 oc delete PipelineRun -l tekton.dev/pipeline=quarkus-deploy
 
