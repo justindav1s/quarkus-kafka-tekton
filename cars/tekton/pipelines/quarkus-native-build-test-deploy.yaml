@@ -111,7 +111,7 @@ spec:
     workspaces:
       - name: maven-settings
         workspace: maven-settings
-      - name: source
+      - name: shared-workspace
         workspace: shared-workspace
       - name: truststore
         workspace: truststore        
