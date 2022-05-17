@@ -151,7 +151,7 @@ spec:
     taskRef:
       name: deploy-template
     runAfter:
-      - configure-filesystem
+      - build-image
     params:
       - name: APP_NAME
         value: $(params.APP_NAME)

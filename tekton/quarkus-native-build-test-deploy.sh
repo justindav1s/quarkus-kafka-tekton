@@ -11,11 +11,11 @@ APP_DIR=${APPS_DIR}/${CONTEXT}
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-config \
-    --from-file=../src/main/resources/config.${PROFILE}.properties \
+    --from-file=../${APP_DIR}/src/main/resources/config.${PROFILE}.properties \
     -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-kafka-truststore \
-    --from-file=../truststore/kafka-truststore.jks \
+    --from-file=../${APP_DIR}/truststore/kafka-truststore.jks \
     -n ${CICD_PROJECT}
 
 oc label configmap ${APP}-${PROFILE}-config app=${APP} -n ${CICD_PROJECT}
@@ -47,7 +47,7 @@ tkn pipeline start quarkus-native-build-test-deploy \
     -p APP_NAME=${APP} \
     -p APP_DIR=${APP_DIR} \
     -p HTTP_CONTEXT=${HTTP_CONTEXT} \
-    -p DEPLOY_PROJECT=${DEPLOY_PROJECT} \    
+    -p DEPLOY_PROJECT=${DEPLOY_PROJECT} \
     -p GIT_REPO=https://github.com/justindav1s/quarkus-kafka-tekton.git \
     -p GIT_BRANCH=main \
     -p APP_PROFILE=${PROFILE} \
