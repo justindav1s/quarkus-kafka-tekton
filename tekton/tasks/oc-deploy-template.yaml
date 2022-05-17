@@ -49,7 +49,7 @@ spec:
           echo -----------DEPLOY------------------------
 
 
-          oc new-app -f tekton/ocp-templates/ingress-template.yaml \
+          oc new-app -f ocp-templates/ingress-template.yaml \
             -p APP_NAME=$(params.APP_NAME) \
             -p SERVICE_NAME=$(params.IMAGE_NAME) \
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME) \
@@ -68,7 +68,7 @@ spec:
           oc label secret $(params.APP_NAME)-$(params.PROFILE)-application-properties app=$(params.APP_NAME) -n $(params.DEPLOY_PROJECT)
           oc label secret $(params.APP_NAME)-$(params.PROFILE)-kafka-truststore app=$(params.APP_NAME) -n $(params.DEPLOY_PROJECT)
 
-          oc new-app -f tekton/ocp-templates/deployment-template.yaml \
+          oc new-app -f ocp-templates/deployment-template.yaml \
             -p APP_NAME=$(params.APP_NAME) \
             -p CONTEXT=$(params.HTTP_CONTEXT) \
             -p IMAGE_REPO=$(params.IMAGE_REPO) \
