@@ -12,11 +12,11 @@ spec:
       type: string
   steps:
     - name: apply
-      image: quay.io/justindav1s/quarkus-native-builder:latest
+      image: quay.io/justindav1s/quarkus-native-builder:rh-openjdk11
       workingDir: /workspace/shared-workspace/$(params.APP_NAME)
       command: ["/bin/bash", "-c"]
       args:
         - |-
           echo -----------Build------------------------
-          mvn -U -B -s tekton/settings.xml '-DskipTests' '-Dnative'  '-Dquarkus.package.type=native' 'clean' 'package'
+          mvn -U -B -s tekton/settings.xml '-DskipTests' '-Dnative'  '-Dquarkus.package.type=native' 'package'
           echo -------------DONE-------------------
