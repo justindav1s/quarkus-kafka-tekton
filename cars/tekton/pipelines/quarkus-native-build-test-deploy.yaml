@@ -131,7 +131,7 @@ spec:
       - build-native-app
     params:
       - name: IMAGE
-        value: $(params.IMAGE_REPO)/$(params.APP_NAME)-native
+        value: $(params.IMAGE_REPO)/$(params.APP_NAME)
       - name: DOCKERFILE
         value: $(params.CONTEXT_DIR)/src/main/docker/Dockerfile.native 
       - name: CONTEXT
@@ -148,11 +148,11 @@ spec:
       - build-image
     params:
       - name: APP_NAME
-        value: $(params.APP_NAME)-native
+        value: $(params.APP_NAME)
       - name: IMAGE_REPO
         value: $(params.IMAGE_REPO)
       - name: IMAGE_NAME
-        value: $(params.APP_NAME)-native
+        value: $(params.APP_NAME)
       - name: IMAGE_TAG
         value: $(params.IMAGE_TAG)
       - name: PROFILE
@@ -160,7 +160,7 @@ spec:
       - name: VERSION_LABEL
         value: $(params.VERSION_LABEL)
       - name: SERVICEACCOUNT_NAME
-        value: $(params.APP_NAME)-$(params.APP_PROFILE)-native-sa
+        value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
     workspaces:
       - name: source
         workspace: shared-workspace

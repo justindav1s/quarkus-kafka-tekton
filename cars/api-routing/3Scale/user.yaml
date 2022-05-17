@@ -1,0 +1,13 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: DeveloperUser
+metadata:
+  name: justin
+  namespace: 3scale
+spec:
+  developerAccountRef:
+    name: jdcorp-dev-acc-1
+  email: justinndavis@gmail.com
+  passwordCredentialsRef:
+    name: justin-creds-secret
+  role: admin
+  username: justin

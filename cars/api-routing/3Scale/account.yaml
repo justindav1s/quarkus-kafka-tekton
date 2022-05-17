@@ -1,0 +1,7 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: DeveloperAccount
+metadata:
+  name: jdcorp-dev-acc-1
+  namespace: 3scale
+spec:
+  orgName: JDcorp

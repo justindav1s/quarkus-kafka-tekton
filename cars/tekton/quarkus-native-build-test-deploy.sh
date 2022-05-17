@@ -2,7 +2,8 @@
 
 
 PROJECT=connected
-APP=cars
+APP=cars-native
+CONTEXT=cars
 PROFILE=dev
 
 oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
@@ -46,7 +47,7 @@ tkn pipeline start quarkus-native-build-test-deploy \
     -p GIT_REPO=https://github.com/justindav1s/quarkus-kafka-tekton.git \
     -p GIT_BRANCH=main \
     -p APP_PROFILE=${PROFILE} \
-    -p CONTEXT_DIR=${APP} \
+    -p CONTEXT_DIR=${CONTEXT} \
     -p IMAGE_REPO=${QUAYIO_HOST}/${QUAYIO_USER} \
     --use-param-defaults \
     --showlog

@@ -1,0 +1,33 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: justin-user
+  labels:
+    app: sso
+    realm: 3scale  
+spec:
+  user:
+    username: "justin"
+    firstName: "Justin"
+    lastName: "Davis"
+    email: "justin@gmail.com"
+    enabled: True
+    emailVerified: False
+    credentials:
+      - type: "password"
+        value: "password"
+    realmRoles:
+      - "offline_access"
+    clientRoles:
+      account:
+        - "manage-account"
+      realm-management:
+        - "manage-users"
+  realmSelector:
+    matchExpressions:
+      - key: realm
+        operator: Exists
+        values:
+          - 3scale  
+    matchLabels:
+      app: sso

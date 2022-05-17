@@ -1,0 +1,21 @@
+{
+  "clientId": "",
+  "name": "",
+  "enabled": true,
+  "secret": "",
+  "clientTemplate": "",
+  "redirectUris": [
+    ""
+  ],
+  "attributes": {
+    "jwks_uri" : "",
+    "nca_id": ""
+  },
+  "bearerOnly": false,
+  "consentRequired": false,
+  "standardFlowEnabled": true,
+  "implicitFlowEnabled": false,
+  "directAccessGrantsEnabled": false,
+  "serviceAccountsEnabled": true,
+  "fullScopeAllowed": false
+}

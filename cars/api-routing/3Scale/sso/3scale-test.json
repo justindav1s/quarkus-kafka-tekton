@@ -1,0 +1,16 @@
+{
+  "clientId": "3scale-test",
+  "name": "3scale-test",
+  "enabled": true,
+  "secret": "changeme",
+  "clientTemplate": "",
+  "redirectUris": ["http://127.0.0.1:9090/authcode"],
+  "attributes": { "jwks_uri": "", "nca_id": "" },
+  "bearerOnly": false,
+  "consentRequired": false,
+  "standardFlowEnabled": true,
+  "implicitFlowEnabled": false,
+  "directAccessGrantsEnabled": false,
+  "serviceAccountsEnabled": true,
+  "fullScopeAllowed": false
+}

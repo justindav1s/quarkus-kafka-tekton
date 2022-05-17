@@ -1,0 +1,24 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: app-client
+  labels:
+    app: sso
+    realm: 3scale
+spec:
+  realmSelector:
+    matchExpressions:
+      - key: realm
+        operator: Exists
+        values:
+          - 3scale
+    matchLabels:
+      app: sso
+  client:
+    clientId: ac04a7b1
+    secret: 	98b6f034c7e7a36e18d5ac058d8760eb
+    directAccessGrantsEnabled: true
+    implicitFlowEnabled: false
+    publicClient: false
+    standardFlowEnabled: false
+    serviceAccountsEnabled: true    

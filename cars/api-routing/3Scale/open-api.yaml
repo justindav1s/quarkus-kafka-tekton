@@ -1,0 +1,47 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: OpenAPI
+metadata:
+  name: connected-cars-openapi
+  namespace: 3scale
+spec:
+  openapiRef:
+    url: https://cars-native-connected.apps.sno.openshiftlabs.net/q/openapi
+  productSystemName: connected-cars-openapi
+  stagingPublicBaseURL: 'https://cc-staging-3scale.apps.sno.openshiftlabs.net'
+  productionPublicBaseURL: 'https://cc-3scale.apps.sno.openshiftlabs.net' 
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: connected-cars-staging
+  namespace: 3scale
+spec:
+  host: cc-staging-3scale.apps.sno.openshiftlabs.net
+  to:
+    kind: Service
+    name: apicast-staging
+    weight: 100
+  port:
+    targetPort: gateway
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: connected-cars-production
+  namespace: 3scale
+spec:
+  host: cc-3scale.apps.sno.openshiftlabs.net
+  to:
+    kind: Service
+    name: apicast-production
+    weight: 100
+  port:
+    targetPort: gateway
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None     

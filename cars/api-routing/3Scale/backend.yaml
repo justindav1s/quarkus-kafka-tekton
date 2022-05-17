@@ -1,0 +1,15 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Backend
+metadata:
+  name: connected-cars-api-backend
+  namespace: 3scale
+spec:
+  description: Cars Information
+  metrics:
+    hits:
+      description: Number of API hits
+      friendlyName: Hits
+      unit: hit
+  name: Amazin API Inventory backend
+  privateBaseURL: 'https://cars-native-connected.apps.sno.openshiftlabs.net/'
+  systemName: connected-cars-api-backend

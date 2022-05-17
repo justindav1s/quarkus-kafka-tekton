@@ -1,0 +1,34 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: 3scale-client
+  namespace: sso
+  labels:
+    app: sso
+    realm: 3scale
+spec:
+  client:
+    enabled: true
+    clientAuthenticatorType: client-secret
+    fullScopeAllowed: true
+    redirectUris:
+      - 'https://keycloak-sso.apps.sno.openshiftlabs.net/auth/admin/realms/3Scale'
+    serviceAccountsEnabled: true
+    clientId: 3scale-client
+    defaultClientScopes:
+      - roles
+    name: 3scale-client
+    implicitFlowEnabled: true
+    secret: 3scale-client
+    publicClient: false
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: true
+  realmSelector:
+    matchExpressions:
+      - key: realm
+        operator: Exists
+        values:
+          - 3scale
+    matchLabels:
+      app: sso
+  scopeMappings: {}

@@ -10,10 +10,14 @@ Experiments with Quarkus, Kafka and Tekton
    * Tekton build/test/deploy
    * Quarkus native build/test/deploy
    * Using quay.io
-   * VSCode Kafka client config for testing
+   * 3Scale Integration
+   * SSO (Keycloak) integration with 3Scale
+   * VSCode Kafka client config for testing (https://github.com/jlandersen/vscode-kafka)
 
 ### TO BE DONE
    * Knative Serving
    * KNative Eventing
    * Camel K
    * Kamelets
+   * Helm
+   * GitOps

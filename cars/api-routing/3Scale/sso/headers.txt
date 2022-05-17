@@ -1,0 +1,22 @@
+HTTP/1.1 302 Found
+cache-control: no-store, must-revalidate, max-age=0
+set-cookie: AUTH_SESSION_ID=ad08fb27-319d-4f23-91f2-f8ad594bb5e0.keycloak-0; Version=1; Path=/auth/realms/3Scale/; SameSite=None; Secure; HttpOnly
+set-cookie: AUTH_SESSION_ID_LEGACY=ad08fb27-319d-4f23-91f2-f8ad594bb5e0.keycloak-0; Version=1; Path=/auth/realms/3Scale/; HttpOnly
+set-cookie: KC_RESTART=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1YjkzNWI1MC01MWJmLTQyNjMtOGNmOC1lMzk1NjM3YzdjMjAifQ.eyJjaWQiOiI3NzM0ZWJkMCIsInB0eSI6Im9wZW5pZC1jb25uZWN0IiwicnVyaSI6Imh0dHA6Ly8xMjcuMC4wLjE6OTA5MC9nZXRjb2RlIiwiYWN0IjoiQVVUSEVOVElDQVRFIiwibm90ZXMiOnsic2NvcGUiOiJvcGVuaWQiLCJpc3MiOiJodHRwczovL2tleWNsb2FrLXNzby5hcHBzLnNuby5vcGVuc2hpZnRsYWJzLm5ldC9hdXRoL3JlYWxtcy8zU2NhbGUiLCJyZXNwb25zZV90eXBlIjoiY29kZSIsInJlZGlyZWN0X3VyaSI6Imh0dHA6Ly8xMjcuMC4wLjE6OTA5MC9nZXRjb2RlIn19.pEZHkS3j36-0aPhNXMJIxJ1SiHChzHpK5zR3nuxmrJk; Version=1; Path=/auth/realms/3Scale/; HttpOnly
+set-cookie: KEYCLOAK_LOCALE=; Version=1; Comment=Expiring cookie; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; Path=/auth/realms/3Scale/; HttpOnly
+set-cookie: KC_RESTART=; Version=1; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; Path=/auth/realms/3Scale/; HttpOnly
+set-cookie: KEYCLOAK_IDENTITY=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1YjkzNWI1MC01MWJmLTQyNjMtOGNmOC1lMzk1NjM3YzdjMjAifQ.eyJleHAiOjE2NTIzMTI4MzcsImlhdCI6MTY1MjI3NjgzNywianRpIjoiZDg5MWJjNTAtZWJmOS00NTA3LWE2ODgtYjFmZmFjYjU4MzUxIiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay1zc28uYXBwcy5zbm8ub3BlbnNoaWZ0bGFicy5uZXQvYXV0aC9yZWFsbXMvM1NjYWxlIiwic3ViIjoiYTQ3ZmU3M2UtOTRiYi00OTRhLThmZDgtNzlkODYzODcwNmE4IiwidHlwIjoiU2VyaWFsaXplZC1JRCIsInNlc3Npb25fc3RhdGUiOiJhZDA4ZmIyNy0zMTlkLTRmMjMtOTFmMi1mOGFkNTk0YmI1ZTAiLCJzaWQiOiJhZDA4ZmIyNy0zMTlkLTRmMjMtOTFmMi1mOGFkNTk0YmI1ZTAiLCJzdGF0ZV9jaGVja2VyIjoibi0xZUxxNHpUUVJrVHZaTW5rWm9TMTg4QnAzOUEwNTVjSnd1Q3dnMEd5ZyJ9.1r47eCq_8_cp7oNz2B0ogVpJyAtPa3NGaBC9BhyDrq0; Version=1; Path=/auth/realms/3Scale/; SameSite=None; Secure; HttpOnly
+set-cookie: KEYCLOAK_IDENTITY_LEGACY=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1YjkzNWI1MC01MWJmLTQyNjMtOGNmOC1lMzk1NjM3YzdjMjAifQ.eyJleHAiOjE2NTIzMTI4MzcsImlhdCI6MTY1MjI3NjgzNywianRpIjoiZDg5MWJjNTAtZWJmOS00NTA3LWE2ODgtYjFmZmFjYjU4MzUxIiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay1zc28uYXBwcy5zbm8ub3BlbnNoaWZ0bGFicy5uZXQvYXV0aC9yZWFsbXMvM1NjYWxlIiwic3ViIjoiYTQ3ZmU3M2UtOTRiYi00OTRhLThmZDgtNzlkODYzODcwNmE4IiwidHlwIjoiU2VyaWFsaXplZC1JRCIsInNlc3Npb25fc3RhdGUiOiJhZDA4ZmIyNy0zMTlkLTRmMjMtOTFmMi1mOGFkNTk0YmI1ZTAiLCJzaWQiOiJhZDA4ZmIyNy0zMTlkLTRmMjMtOTFmMi1mOGFkNTk0YmI1ZTAiLCJzdGF0ZV9jaGVja2VyIjoibi0xZUxxNHpUUVJrVHZaTW5rWm9TMTg4QnAzOUEwNTVjSnd1Q3dnMEd5ZyJ9.1r47eCq_8_cp7oNz2B0ogVpJyAtPa3NGaBC9BhyDrq0; Version=1; Path=/auth/realms/3Scale/; HttpOnly
+set-cookie: KEYCLOAK_SESSION=3Scale/a47fe73e-94bb-494a-8fd8-79d8638706a8/ad08fb27-319d-4f23-91f2-f8ad594bb5e0; Version=1; Expires=Wed, 11-May-2022 23:47:17 GMT; Max-Age=36000; Path=/auth/realms/3Scale/; SameSite=None; Secure
+set-cookie: KEYCLOAK_SESSION_LEGACY=3Scale/a47fe73e-94bb-494a-8fd8-79d8638706a8/ad08fb27-319d-4f23-91f2-f8ad594bb5e0; Version=1; Expires=Wed, 11-May-2022 23:47:17 GMT; Max-Age=36000; Path=/auth/realms/3Scale/
+set-cookie: KEYCLOAK_REMEMBER_ME=; Version=1; Comment=Expiring cookie; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; Path=/auth/realms/3Scale/; HttpOnly
+p3p: CP="This is not a P3P policy!"
+x-xss-protection: 1; mode=block
+location: http://127.0.0.1:9090/getcode?session_state=ad08fb27-319d-4f23-91f2-f8ad594bb5e0&code=d4e606b0-e0cb-46e0-aa9f-6e2324a4b5c1.ad08fb27-319d-4f23-91f2-f8ad594bb5e0.dbbb95a0-da55-4946-a44a-cb830778fb65
+referrer-policy: no-referrer
+date: Wed, 11 May 2022 13:47:17 GMT
+strict-transport-security: max-age=31536000; includeSubDomains
+x-content-type-options: nosniff
+content-length: 0
+set-cookie: 6a4ba2fbd57fbf453c57ac05e9447551=18006a394d912196c7296330409fe1cd; path=/; HttpOnly; Secure; SameSite=None
+
