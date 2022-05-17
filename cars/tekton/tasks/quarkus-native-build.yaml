@@ -18,6 +18,6 @@ spec:
       args:
         - |-
           echo -----------Build------------------------
-          chmod -R 777 /workspace/source/$(params.APP_NAME)
+          chmod -R 777 *
           mvn -U -B '-DskipTests' '-Dnative'  '-Dquarkus.package.type=native' 'clean' 'package'
           echo -------------DONE-------------------
