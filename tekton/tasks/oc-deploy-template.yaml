@@ -29,7 +29,7 @@ spec:
   steps:
     - name: apply
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-      workingDir: /workspace/source/$(params.APP_DIR)
+      workingDir: $(workspaces.source.path)/$(params.APP_DIR)
       command: ["/bin/bash", "-c"]
       args:
         - |-
@@ -62,7 +62,7 @@ spec:
               -n $(params.DEPLOY_PROJECT)
 
           oc create secret generic $(params.APP_NAME)-$(params.PROFILE)-kafka-truststore \
-              --from-file=truststore/kafka-truststore.jks \
+              --from-file=$(workspaces.source.path)/kafka-truststore.jks \
               -n $(params.DEPLOY_PROJECT)
 
           oc label secret $(params.APP_NAME)-$(params.PROFILE)-application-properties app=$(params.APP_NAME) -n $(params.DEPLOY_PROJECT)
