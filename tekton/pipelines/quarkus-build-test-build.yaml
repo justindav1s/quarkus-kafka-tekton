@@ -1,13 +1,13 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: quarkus-native-build-test-deploy
+  name: quarkus-build-test-build
 spec:
   workspaces:
   - name: shared-workspace
   - name: maven-settings
   - name: truststore
-  - name: application-properties  
+  - name: application-properties
   params:
   - name: APP_NAME
     type: string
@@ -18,7 +18,7 @@ spec:
   - name: HTTP_CONTEXT
     type: string  
   - name: DEPLOY_PROJECT
-    type: string     
+    type: string    
   - name: GIT_REPO
     type: string
     description: url of the git repo for the code of deployment
@@ -72,12 +72,12 @@ spec:
     - name: truststore
       workspace: truststore
     - name: application-properties
-      workspace: application-properties
+      workspace: application-properties      
     params:
     - name: APP_NAME
       value: $(params.APP_NAME)
     - name: APP_DIR
-      value: $(params.APP_DIR)    
+      value: $(params.APP_DIR)
     - name: script
       value: |
         #!/usr/bin/env bash
@@ -119,7 +119,7 @@ spec:
         workspace: maven-settings
       - name: source
         workspace: shared-workspace
-  - name: build-native-app
+  - name: build-java-app
     taskRef:
       name: maven
       kind: ClusterTask
@@ -128,65 +128,36 @@ spec:
     params:
       - name: CONTEXT_DIR
         value: $(params.APP_DIR)
-      - name: MAVEN_IMAGE
-        value: quay.io/justindav1s/quarkus-native-builder:gcr-mvn-graalce22
       - name: GOALS
         value:
-          - -U 
+          - -U
+          - -q 
+          - -Dmaven.wagon.http.ssl.insecure=true 
+          - -Dmaven.wagon.http.ssl.allowall=true
           - -B
-          - '-DskipTests' 
-          - '-Dnative'  
-          - '-Dquarkus.package.type=native' 
-          - 'package'
+          - '-DskipTests'
+          - 'clean'
+          - 'deploy'
     workspaces:
       - name: maven-settings
         workspace: maven-settings
       - name: source
-        workspace: shared-workspace              
+        workspace: shared-workspace
   - name: build-image
     taskRef:
       name: buildah
       kind: ClusterTask
     runAfter:
-      - build-native-app
+      - build-java-app
     params:
       - name: IMAGE
         value: $(params.IMAGE_REPO)/$(params.APP_NAME)
       - name: DOCKERFILE
-        value: $(params.APP_DIR)/src/main/docker/Dockerfile.native 
+        value: $(params.APP_DIR)/src/main/docker/Dockerfile.jvm 
       - name: CONTEXT
         value: $(params.APP_DIR)
       - name: TLSVERIFY
         value: 'false'
-    workspaces:
-      - name: source
-        workspace: shared-workspace
-  - name: deploy-image
-    taskRef:
-      name: deploy-template
-    runAfter:
-      - build-image
-    params:
-      - name: APP_NAME
-        value: $(params.APP_NAME)
-      - name: APP_DIR
-        value: $(params.APP_DIR)        
-      - name: HTTP_CONTEXT
-        value: $(params.HTTP_CONTEXT)
-      - name: DEPLOY_PROJECT
-        value: $(params.DEPLOY_PROJECT)
-      - name: IMAGE_REPO
-        value: $(params.IMAGE_REPO)
-      - name: IMAGE_NAME
-        value: $(params.APP_NAME)
-      - name: IMAGE_TAG
-        value: $(params.IMAGE_TAG)
-      - name: PROFILE
-        value: $(params.APP_PROFILE)
-      - name: VERSION_LABEL
-        value: $(params.VERSION_LABEL)
-      - name: SERVICEACCOUNT_NAME
-        value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
     workspaces:
       - name: source
         workspace: shared-workspace

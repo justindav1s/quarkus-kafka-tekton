@@ -22,7 +22,7 @@ oc create configmap ${APP}-${PROFILE}-kafka-truststore \
 oc label configmap ${APP}-${PROFILE}-application-properties app=${APP} -n ${CICD_PROJECT}
 oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP} -n ${CICD_PROJECT}
 
-cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
+cat << EOF > ${APP}-${PROFILE}-deploy-pipeline-pvc.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -44,7 +44,7 @@ oc apply -f pipelines/quarkus-deploy.yaml
 oc delete PipelineRun -l tekton.dev/pipeline=quarkus-deploy
 
 tkn pipeline start quarkus-deploy \
-    -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \
+    -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-deploy-pipeline-pvc.yaml \
     -w name=truststore,config=${APP}-${PROFILE}-kafka-truststore \
     -w name=application-properties,config=${APP}-${PROFILE}-application-properties \
     -p APP_NAME=${APP} \

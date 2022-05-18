@@ -21,7 +21,7 @@ oc create configmap ${APP}-${PROFILE}-kafka-truststore \
 oc label configmap ${APP}-${PROFILE}-application-properties app=${APP} -n ${CICD_PROJECT}
 oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP} -n ${CICD_PROJECT}
 
-cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
+cat << EOF > ${APP}-${PROFILE}-build-test-build-pipeline-pvc.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -36,12 +36,12 @@ EOF
 
 oc apply -f tasks/run-script-task.yaml -n ${CICD_PROJECT}
 oc apply -f tasks/oc-deploy-template.yaml -n ${CICD_PROJECT}
-oc apply -f pipelines/quarkus-native-build-test-deploy.yaml -n ${CICD_PROJECT}
+oc apply -f pipelines/quarkus-native-build-test-build.yaml -n ${CICD_PROJECT}
 
-oc delete PipelineRun -l tekton.dev/pipeline=quarkus-deploy
+oc delete PipelineRun -l tekton.dev/pipeline=quarkus-native-build-test-build
 
-tkn pipeline start quarkus-native-build-test-deploy \
-    -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \
+tkn pipeline start quarkus-native-build-test-build \
+    -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-build-test-build-pipeline-pvc.yaml \
     -w name=maven-settings,config=custom-maven-settings \
     -w name=truststore,config=${APP}-${PROFILE}-kafka-truststore \
     -w name=application-properties,config=${APP}-${PROFILE}-application-properties \
