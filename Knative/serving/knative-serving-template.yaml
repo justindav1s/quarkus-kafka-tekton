@@ -1,0 +1,36 @@
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cars-serverless
+  labels:
+    app: cars-serverless  
+spec:
+  template:
+    spec:
+      containerConcurrency: 0
+      containers:
+        - image: 'quay.io/justindav1s/cars-native:latest'
+          name: cars-serverless
+          volumeMounts:
+            - name: application-properties
+              mountPath: /work/config          
+            - name: truststore
+              mountPath: /deployments/truststore   
+          readinessProbe:
+            successThreshold: 1
+            tcpSocket:
+              port: 0
+          resources: {}
+      enableServiceLinks: false
+      timeoutSeconds: 300
+      volumes:
+        - name: application-properties
+          secret:
+            secretName: cars-serverless-dev-application-properties
+        - name: truststore
+          secret:
+            secretName: cars-serverless-dev-kafka-truststore    
+  traffic:
+    - latestRevision: true
+      percent: 100

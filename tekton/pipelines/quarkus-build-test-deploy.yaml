@@ -7,6 +7,7 @@ spec:
   - name: shared-workspace
   - name: maven-settings
   - name: truststore
+  - name: application-properties
   params:
   - name: APP_NAME
     type: string
@@ -70,6 +71,8 @@ spec:
       workspace: shared-workspace
     - name: truststore
       workspace: truststore
+    - name: application-properties
+      workspace: application-properties      
     params:
     - name: script
       value: |
@@ -81,6 +84,10 @@ spec:
         echo "making kafka-trustore.jks available to build/test"
         cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
         ls -ltr $(workspaces.storage.path)
+
+        echo Making application.properties available during testing
+        ls -ltr $(workspaces.application-properties.path)
+        cp $($(workspaces.application-properties.path))/application.properties $(workspaces.storage.path)/apps/cars/config
     runAfter:
       - fetch-repository
   - name: test-java-app
@@ -105,74 +112,74 @@ spec:
         workspace: maven-settings
       - name: source
         workspace: shared-workspace
-  - name: build-java-app
-    taskRef:
-      name: maven
-      kind: ClusterTask
-    runAfter:
-      - test-java-app
-    params:
-      - name: CONTEXT_DIR
-        value: $(params.APP_DIR)
-      - name: GOALS
-        value:
-          - -U
-          - -q 
-          - -Dmaven.wagon.http.ssl.insecure=true 
-          - -Dmaven.wagon.http.ssl.allowall=true
-          - -B
-          - '-DskipTests'
-          - 'clean'
-          - 'deploy'
-    workspaces:
-      - name: maven-settings
-        workspace: maven-settings
-      - name: source
-        workspace: shared-workspace
-  - name: build-image
-    taskRef:
-      name: buildah
-      kind: ClusterTask
-    runAfter:
-      - build-java-app
-    params:
-      - name: IMAGE
-        value: $(params.IMAGE_REPO)/$(params.APP_NAME)
-      - name: DOCKERFILE
-        value: $(params.APP_DIR)/src/main/docker/Dockerfile.jvm 
-      - name: CONTEXT
-        value: $(params.APP_DIR)
-      - name: TLSVERIFY
-        value: 'false'
-    workspaces:
-      - name: source
-        workspace: shared-workspace
-  - name: deploy-image
-    taskRef:
-      name: deploy-template
-    runAfter:
-      - build-image
-    params:
-      - name: APP_NAME
-        value: $(params.APP_NAME)
-      - name: APP_DIR
-        value: $(params.APP_DIR)        
-      - name: HTTP_CONTEXT
-        value: $(params.HTTP_CONTEXT)
-      - name: DEPLOY_PROJECT
-        value: $(params.DEPLOY_PROJECT)
-      - name: IMAGE_REPO
-        value: $(params.IMAGE_REPO)
-      - name: IMAGE_NAME
-        value: $(params.APP_NAME)
-      - name: IMAGE_TAG
-        value: $(params.IMAGE_TAG)
-      - name: PROFILE
-        value: $(params.APP_PROFILE)
-      - name: VERSION_LABEL
-        value: $(params.VERSION_LABEL)
-      - name: SERVICEACCOUNT_NAME
-        value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
-    workspaces:
-      - name: source
-        workspace: shared-workspace
+  # - name: build-java-app
+  #   taskRef:
+  #     name: maven
+  #     kind: ClusterTask
+  #   runAfter:
+  #     - test-java-app
+  #   params:
+  #     - name: CONTEXT_DIR
+  #       value: $(params.APP_DIR)
+  #     - name: GOALS
+  #       value:
+  #         - -U
+  #         - -q 
+  #         - -Dmaven.wagon.http.ssl.insecure=true 
+  #         - -Dmaven.wagon.http.ssl.allowall=true
+  #         - -B
+  #         - '-DskipTests'
+  #         - 'clean'
+  #         - 'deploy'
+  #   workspaces:
+  #     - name: maven-settings
+  #       workspace: maven-settings
+  #     - name: source
+  #       workspace: shared-workspace
+  # - name: build-image
+  #   taskRef:
+  #     name: buildah
+  #     kind: ClusterTask
+  #   runAfter:
+  #     - build-java-app
+  #   params:
+  #     - name: IMAGE
+  #       value: $(params.IMAGE_REPO)/$(params.APP_NAME)
+  #     - name: DOCKERFILE
+  #       value: $(params.APP_DIR)/src/main/docker/Dockerfile.jvm 
+  #     - name: CONTEXT
+  #       value: $(params.APP_DIR)
+  #     - name: TLSVERIFY
+  #       value: 'false'
+  #   workspaces:
+  #     - name: source
+  #       workspace: shared-workspace
+  # - name: deploy-image
+  #   taskRef:
+  #     name: deploy-template
+  #   runAfter:
+  #     - build-image
+  #   params:
+  #     - name: APP_NAME
+  #       value: $(params.APP_NAME)
+  #     - name: APP_DIR
+  #       value: $(params.APP_DIR)        
+  #     - name: HTTP_CONTEXT
+  #       value: $(params.HTTP_CONTEXT)
+  #     - name: DEPLOY_PROJECT
+  #       value: $(params.DEPLOY_PROJECT)
+  #     - name: IMAGE_REPO
+  #       value: $(params.IMAGE_REPO)
+  #     - name: IMAGE_NAME
+  #       value: $(params.APP_NAME)
+  #     - name: IMAGE_TAG
+  #       value: $(params.IMAGE_TAG)
+  #     - name: PROFILE
+  #       value: $(params.APP_PROFILE)
+  #     - name: VERSION_LABEL
+  #       value: $(params.VERSION_LABEL)
+  #     - name: SERVICEACCOUNT_NAME
+  #       value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
+  #   workspaces:
+  #     - name: source
+  #       workspace: shared-workspace

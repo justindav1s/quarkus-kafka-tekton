@@ -1,7 +1,8 @@
 #!/bin/bash
 
 URL=https://cars-native-connected.apps.sno.openshiftlabs.net
-#URL=https://cars-connected.apps.sno.openshiftlabs.net
+URL=https://cars-connected.apps.sno.openshiftlabs.net
+URL=https://cars-serverless-connected.apps.sno.openshiftlabs.net
 
 echo Using URL : ${URL}
 
