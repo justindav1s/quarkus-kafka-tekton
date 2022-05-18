@@ -31,6 +31,9 @@ spec:
     type: string
     description: repo for container image
     default: quay.io/justindav1s
+  - name: IMAGE_NAME
+    type: string
+    description: name container image
   - name: IMAGE_TAG
     type: string
     description: tag for container image
@@ -106,7 +109,7 @@ spec:
       - name: IMAGE_REPO
         value: $(params.IMAGE_REPO)
       - name: IMAGE_NAME
-        value: $(params.APP_NAME)
+        value: $(params.IMAGE_NAME)
       - name: IMAGE_TAG
         value: $(params.IMAGE_TAG)
       - name: PROFILE
