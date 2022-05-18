@@ -4,13 +4,13 @@ kind: Template
 metadata:
   name: knative-serving-template
 objects:
-- apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    annotations:
-    labels:
-      app: ${APP_NAME}
-    name: ${SERVICEACCOUNT_NAME}
+# - apiVersion: v1
+#   kind: ServiceAccount
+#   metadata:
+#     annotations:
+#     labels:
+#       app: ${APP_NAME}
+#     name: ${SERVICEACCOUNT_NAME}
 
 - apiVersion: serving.knative.dev/v1
   kind: Service

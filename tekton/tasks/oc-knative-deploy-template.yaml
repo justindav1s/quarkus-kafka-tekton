@@ -53,6 +53,7 @@ spec:
           echo CONTAINER_WORKING_DIR:  $(params.CONTAINER_WORKING_DIR)
           echo -----------DEPLOY------------------------
 
+          oc create sa $(params.SERVICEACCOUNT_NAME) -n $(params.DEPLOY_PROJECT) 
           oc secrets link $(params.SERVICEACCOUNT_NAME) quay-dockercfg --for=pull -n $(params.DEPLOY_PROJECT) 
         
           oc create secret generic $(params.APP_NAME)-$(params.PROFILE)-application-properties \
