@@ -27,7 +27,9 @@ spec:
     - name: VERSION_LABEL
       type: string
     - name: SERVICEACCOUNT_NAME
-      type: string    
+      type: string
+    - name: CONTAINER_WORKING_DIR
+      type: string        
   steps:
     - name: apply
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
@@ -48,6 +50,7 @@ spec:
           echo PROFILE: $(params.PROFILE)
           echo VERSION_LABEL: $(params.APP_NAME)
           echo SERVICEACCOUNT_NAME: $(params.APP_NAME)
+          echo CONTAINER_WORKING_DIR:  $(params.CONTAINER_WORKING_DIR)
           echo -----------DEPLOY------------------------
 
 
@@ -79,5 +82,6 @@ spec:
             -p PROFILE=$(params.PROFILE) \
             -p VERSION_LABEL=$(params.VERSION_LABEL) \
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME) \
+            -p CONTAINER_WORKING_DIR=$(params.CONTAINER_WORKING_DIR) \
             -n $(params.DEPLOY_PROJECT)
           echo -------------DONE-------------------

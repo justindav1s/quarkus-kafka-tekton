@@ -39,6 +39,10 @@ spec:
     type: string
     description: version label for pod 
     default: v1
+  - name: CONTAINER_WORKING_DIR
+    type: string
+    description: working dir of container 
+    default: deployments
   tasks:
   - name: fetch-repository
     taskRef:
@@ -111,6 +115,8 @@ spec:
         value: $(params.VERSION_LABEL)
       - name: SERVICEACCOUNT_NAME
         value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
+      - name: CONTAINER_WORKING_DIR
+        value: $(params.CONTAINER_WORKING_DIR)
     workspaces:
       - name: source
         workspace: shared-workspace

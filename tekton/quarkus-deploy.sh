@@ -55,6 +55,7 @@ tkn pipeline start quarkus-deploy \
     -p GIT_BRANCH=main \
     -p APP_PROFILE=${PROFILE} \
     -p IMAGE_REPO=${QUAYIO_HOST}/${QUAYIO_USER} \
+    -p CONTAINER_WORKING_DIR=deployments \
     --use-param-defaults \
     --showlog \
      -n ${CICD_PROJECT}

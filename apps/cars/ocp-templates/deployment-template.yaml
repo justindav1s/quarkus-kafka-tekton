@@ -70,9 +70,9 @@ objects:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
-              - mountPath: /deployments/config
+              - mountPath: /${CONTAINER_WORKING_DIR}/config
                 name: ${APP_NAME}-${PROFILE}-application-properties
-              - mountPath: /deployments/truststore
+              - mountPath: /${CONTAINER_WORKING_DIR}/truststore
                 name: ${APP_NAME}-${PROFILE}-kafka-truststore                
         dnsPolicy: ClusterFirst
         restartPolicy: Always
@@ -120,4 +120,7 @@ parameters:
     name: SERVICEACCOUNT_NAME
     required: true
     value: "inventory-prd-sa"
-
+  - description: The ServiceAccount name.
+    name: CONTAINER_WORKING_DIR
+    required: true
+    value: "deployments"
