@@ -68,6 +68,10 @@ spec:
     - name: application-properties
       workspace: application-properties       
     params:
+    - name: APP_NAME
+      value: $(params.APP_NAME)
+    - name: APP_DIR
+      value: $(params.APP_DIR)    
     - name: script
       value: |
         #!/usr/bin/env bash
