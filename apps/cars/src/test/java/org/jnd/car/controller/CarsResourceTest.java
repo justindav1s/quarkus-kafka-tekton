@@ -30,6 +30,6 @@ public class CarsResourceTest {
                 .statusCode(200)
                 .extract().body()
                 .asString();
-        assertDoesNotThrow(() -> requestBody.fromString(body));        
+        assertDoesNotThrow(() -> requestBody.toString(body));        
     }
 }
