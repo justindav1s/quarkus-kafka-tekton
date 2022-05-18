@@ -77,5 +77,5 @@ spec:
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME) \
             -p CONTAINER_WORKING_DIR=$(params.CONTAINER_WORKING_DIR) \
             -n $(params.DEPLOY_PROJECT) \
-            | oc create -f -
+            | oc apply -f -
           echo -------------DONE-------------------
