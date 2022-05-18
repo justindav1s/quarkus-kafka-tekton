@@ -14,6 +14,7 @@ do
     # curl -X GET $URL/q/openapi
     echo
     curl -d "@car.json" -H "Content-Type: application/json" -X POST $URL/cars/request
+    echo
 done
 
  
