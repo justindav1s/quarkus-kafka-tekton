@@ -2,6 +2,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: cars-dev-pipeline-pvc
+  labels:
+      app: cars
 spec:
   accessModes:
     - ReadWriteOnce

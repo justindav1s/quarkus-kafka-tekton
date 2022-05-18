@@ -9,17 +9,17 @@ PROFILE=dev
 
 oc project ${CICD_PROJECT}
 
-oc delete configmap ${APP}-${PROFILE}-config ${APP}-${PROFILE}-kafka-truststore
+oc delete configmap ${APP}-${PROFILE}-application-properties ${APP}-${PROFILE}-kafka-truststore -n ${CICD_PROJECT}
 
-oc create configmap ${APP}-${PROFILE}-config \
-    --from-file=../${APP_DIR}/src/main/resources/config.${PROFILE}.properties \
+oc create configmap ${APP}-${PROFILE}-application-properties \
+    --from-file=application.properties=../${APP_DIR}/config/application.${PROFILE}.properties \
     -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-kafka-truststore \
     --from-file=../${APP_DIR}/truststore/kafka-truststore.jks \
     -n ${CICD_PROJECT}
 
-oc label configmap ${APP}-${PROFILE}-config app=${APP} -n ${CICD_PROJECT}
+oc label configmap ${APP}-${PROFILE}-application-properties app=${APP} -n ${CICD_PROJECT}
 oc label configmap ${APP}-${PROFILE}-kafka-truststore app=${APP} -n ${CICD_PROJECT}
 
 cat << EOF > ${APP}-${PROFILE}-pipeline-pvc.yaml
