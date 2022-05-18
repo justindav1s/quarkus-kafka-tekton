@@ -46,6 +46,7 @@ oc delete PipelineRun -l tekton.dev/pipeline=quarkus-deploy
 tkn pipeline start quarkus-deploy \
     -w name=shared-workspace,volumeClaimTemplateFile=${APP}-${PROFILE}-pipeline-pvc.yaml \
     -w name=truststore,config=${APP}-${PROFILE}-kafka-truststore \
+    -w name=application-properties,config=${APP}-${PROFILE}-application-properties \
     -p APP_NAME=${APP} \
     -p APP_DIR=${APP_DIR} \
     -p HTTP_CONTEXT=${HTTP_CONTEXT} \
