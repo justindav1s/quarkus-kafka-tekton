@@ -14,7 +14,7 @@ oc delete secret -l app=${APP_DEPLOY_NAME}  -n ${DEPLOY_PROJECT}
 oc delete kservice -l app=${APP_DEPLOY_NAME} -n ${DEPLOY_PROJECT}
 
 oc create secret generic ${APP_DEPLOY_NAME}-${PROFILE}-application-properties \
-    --from-file=application.properties=${PROJECT_ROOT}/${APPS_DIR}/${APP}/src/main/resources/application.${PROFILE}.properties \
+    --from-file=application.properties=${PROJECT_ROOT}/${APPS_DIR}/${APP}/config/application.${PROFILE}.properties \
     -n ${DEPLOY_PROJECT}
 
 oc create secret generic ${APP_DEPLOY_NAME}-${PROFILE}-kafka-truststore \
