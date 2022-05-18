@@ -36,7 +36,7 @@ public class CarsResource {
      */
     @POST
     @Path("/request")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String createRequest(Car car) {
         LOG.info("createRequest called : "+car.toString());
         CarRequestEmitter.send(car.toString());
