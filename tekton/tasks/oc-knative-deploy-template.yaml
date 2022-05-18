@@ -53,13 +53,6 @@ spec:
           echo CONTAINER_WORKING_DIR:  $(params.CONTAINER_WORKING_DIR)
           echo -----------DEPLOY------------------------
 
-
-          oc new-app -f ocp-templates/ingress-template.yaml \
-            -p APP_NAME=$(params.APP_NAME) \
-            -p SERVICE_NAME=$(params.IMAGE_NAME) \
-            -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME) \
-            -n $(params.DEPLOY_PROJECT)
-
           oc secrets link $(params.SERVICEACCOUNT_NAME) quay-dockercfg --for=pull -n $(params.DEPLOY_PROJECT) 
         
           oc create secret generic $(params.APP_NAME)-$(params.PROFILE)-application-properties \
@@ -73,7 +66,7 @@ spec:
           oc label secret $(params.APP_NAME)-$(params.PROFILE)-application-properties app=$(params.APP_NAME) -n $(params.DEPLOY_PROJECT)
           oc label secret $(params.APP_NAME)-$(params.PROFILE)-kafka-truststore app=$(params.APP_NAME) -n $(params.DEPLOY_PROJECT)
 
-          oc new-app -f ocp-templates/knative-serving-template.yaml \
+          oc process -f ocp-templates/knative-serving-template.yaml \
             -p APP_NAME=$(params.APP_NAME) \
             -p CONTEXT=$(params.HTTP_CONTEXT) \
             -p IMAGE_REPO=$(params.IMAGE_REPO) \
@@ -83,5 +76,6 @@ spec:
             -p VERSION_LABEL=$(params.VERSION_LABEL) \
             -p SERVICEACCOUNT_NAME=$(params.SERVICEACCOUNT_NAME) \
             -p CONTAINER_WORKING_DIR=$(params.CONTAINER_WORKING_DIR) \
-            -n $(params.DEPLOY_PROJECT)
+            -n $(params.DEPLOY_PROJECT) \
+            | oc create -f -
           echo -------------DONE-------------------

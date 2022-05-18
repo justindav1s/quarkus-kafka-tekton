@@ -54,6 +54,7 @@ tkn pipeline start quarkus-knative-deploy \
     -p GIT_REPO=https://github.com/justindav1s/quarkus-kafka-tekton.git \
     -p GIT_BRANCH=main \
     -p APP_PROFILE=${PROFILE} \
+    -p IMAGE_NAME=cars-native \
     -p IMAGE_REPO=${QUAYIO_HOST}/${QUAYIO_USER} \
     -p CONTAINER_WORKING_DIR=work \
     --use-param-defaults \
