@@ -46,8 +46,8 @@ objects:
             resources: {}
         enableServiceLinks: false
         timeoutSeconds: 300
-        serviceAccount: ${SERVICEACCOUNT_NAME}
-        serviceAccountName: ${SERVICEACCOUNT_NAME}
+        # serviceAccount: ${SERVICEACCOUNT_NAME}
+        # serviceAccountName: ${SERVICEACCOUNT_NAME}
         volumes:
           - name: application-properties
             secret:
