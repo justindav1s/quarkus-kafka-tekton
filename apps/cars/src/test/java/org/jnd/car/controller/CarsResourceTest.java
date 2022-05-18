@@ -1,7 +1,7 @@
 package org.jnd.car.controller;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.UUID;
 
@@ -30,6 +30,6 @@ public class CarsResourceTest {
                 .statusCode(200)
                 .extract().body()
                 .asString();
-        assertDoesNotThrow(() -> requestBody.toString(body));        
+        assertEquals(requestBody, body);       
     }
 }
