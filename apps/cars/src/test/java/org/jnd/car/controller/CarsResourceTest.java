@@ -9,16 +9,33 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
 
+import org.jboss.logging.Logger;
+
 @QuarkusTest
 public class CarsResourceTest {
+
+    private static final Logger LOG = Logger.getLogger(CarsResourceTest.class);
+
+    @Test
+    void testHealthEndpoint() {
+
+        LOG.info("testing testHealthEndpoint");
+
+        String body = given()
+                .when()
+                .get("/cars/health")
+                .then()
+                .extract().body()
+                .asString();
+        assertEquals(body, "OK");       
+    }
 
     @Test
     void testQuotesEventStream() {
 
-        String requestBody = "{\n" +
-        "  \"id\": \"1\",\n" +
-        "  \"state\": \"locked\",\n" +
-        "\n}";
+        LOG.info("testing");
+
+        String requestBody = "{\"id\":\"1\",\"state\":\"locked\"}";
 
         String body = given()
                 .header("Content-type", "application/json")
@@ -27,7 +44,6 @@ public class CarsResourceTest {
                 .when()
                 .post("/cars/request")
                 .then()
-                .statusCode(200)
                 .extract().body()
                 .asString();
         assertEquals(requestBody, body);       

@@ -3,23 +3,23 @@ package org.jnd.car.model;
 public class Car {
 
     public String id;
-    public int state;
+    public String state;
 
     /**
      * Default constructor required for Jackson serializer
      */
     public Car() { }
 
-    public Car(String id, int price) {
+    public Car(String id, String state) {
         this.id = id;
-        this.state = price;
+        this.state = state;
     }
 
     @Override
     public String toString() {
-        return "Quote{" +
-                "id='" + id + '\'' +
-                ", state=" + state +
-                '}';
+        return "{" +
+                " \"id\": \"" + id + '\"' +
+                ", \"state\": \"" + state +
+                "\" }";
     }
 }
