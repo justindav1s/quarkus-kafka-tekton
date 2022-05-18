@@ -7,6 +7,7 @@ spec:
   - name: shared-workspace
   - name: maven-settings
   - name: truststore
+  - name: application-properties  
   params:
   - name: APP_NAME
     type: string
@@ -70,17 +71,31 @@ spec:
       workspace: shared-workspace
     - name: truststore
       workspace: truststore
+    - name: application-properties
+      workspace: application-properties
     params:
+    - name: APP_NAME
+      value: $(params.APP_NAME)
+    - name: APP_DIR
+      value: $(params.APP_DIR)    
     - name: script
       value: |
         #!/usr/bin/env bash
         set -xe
         echo "Script running in $(workspaces.storage.path)"
+        echo APP_DIR: $(params.APP_DIR)
+        echo APP_NAME: $(params.APP_NAME)
         echo "fixing  permissions....."
         chmod -R 777 $(workspaces.storage.path)
         echo "making kafka-trustore.jks available to build/test"
-        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
-        ls -ltr $(workspaces.storage.path)
+        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)/$(params.APP_DIR)/truststore
+        ls -ltr $(workspaces.storage.path)/$(params.APP_DIR)/truststore
+
+        echo Making application.properties available during testing
+        ls -ltr $(workspaces.application-properties.path)
+        cp $(workspaces.application-properties.path)/application.properties $(workspaces.storage.path)/$(params.APP_DIR)/config
+        ls -ltr $(workspaces.storage.path)/$(params.APP_DIR)/config
+        cat $(workspaces.storage.path)/$(params.APP_DIR)/config/application.properties
     runAfter:
       - fetch-repository
   - name: test-java-app
@@ -96,7 +111,6 @@ spec:
         value:
           - -U 
           - -q
-          - -Dkafka.ssl.truststore.location=$(workspaces.source.path)/kafka-truststore.jks
           - -B
           - 'clean'
           - 'test'
