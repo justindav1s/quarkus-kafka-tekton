@@ -82,8 +82,8 @@ spec:
         echo "fixing  permissions....."
         chmod -R 777 $(workspaces.storage.path)
         echo "making kafka-trustore.jks available to build/test"
-        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)/truststore
-        ls -ltr $(workspaces.storage.path)$(workspaces.storage.path)/truststore
+        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)/apps/cars/truststore
+        ls -ltr $(workspaces.storage.path)/apps/cars/truststore
 
         echo Making application.properties available during testing
         ls -ltr $(workspaces.application-properties.path)
