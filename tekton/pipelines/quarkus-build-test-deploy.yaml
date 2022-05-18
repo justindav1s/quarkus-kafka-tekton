@@ -74,11 +74,17 @@ spec:
     - name: application-properties
       workspace: application-properties      
     params:
+    - name: APP_NAME
+      value: $(params.APP_NAME)
+    - name: APP_DIR
+      value: $(params.APP_DIR)
     - name: script
       value: |
         #!/usr/bin/env bash
         set -xe
         echo "Script running in $(workspaces.storage.path)"
+        echo APP_DIR: $(params.APP_DIR)
+        echo APP_NAME: $(params.APP_NAME)
         echo "fixing  permissions....."
         chmod -R 777 $(workspaces.storage.path)
         echo "making kafka-trustore.jks available to build/test"

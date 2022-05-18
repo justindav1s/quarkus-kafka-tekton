@@ -12,6 +12,11 @@ spec:
     readOnly: false  
   params:
   - name: script
+    type: string
+  - name: APP_NAME
+    type: string
+  - name: APP_DIR
+    type: string   
   steps:
   - name: run-script
     image: centos
