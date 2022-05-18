@@ -1,6 +1,7 @@
 package org.jnd.car.controller;
 
 import java.util.UUID;
+import org.jboss.logging.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,15 +9,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.jnd.car.model.Car;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.jnd.car.model.Car;
 
 import io.smallrye.mutiny.Multi;
 
 
 @Path("/cars")
 public class CarsResource {
+
+    private static final Logger LOG = Logger.getLogger(CarsResource.class);
 
     @Channel("car-requests")
     Emitter<String> CarRequestEmitter;
@@ -25,6 +28,7 @@ public class CarsResource {
     @Path("/health")
     @Produces(MediaType.TEXT_PLAIN)
     public String health() {
+        LOG.info("health called");
         return "OK";
     }
     /**
@@ -33,10 +37,10 @@ public class CarsResource {
     @POST
     @Path("/request")
     @Produces(MediaType.TEXT_PLAIN)
-    public String createRequest() {
-        UUID uuid = UUID.randomUUID();
-        CarRequestEmitter.send(uuid.toString());
-        return uuid.toString();
+    public String createRequest(Car car) {
+        LOG.info("createRequest called : "+car.toString());
+        CarRequestEmitter.send(car.toString());
+        return car.toString();
     }
 
     @Channel("cars")

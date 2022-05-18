@@ -14,13 +14,22 @@ public class CarsResourceTest {
 
     @Test
     void testQuotesEventStream() {
+
+        String requestBody = "{\n" +
+        "  \"id\": \"1\",\n" +
+        "  \"state\": \"locked\",\n" +
+        "\n}";
+
         String body = given()
+                .header("Content-type", "application/json")
+                .and()
+                .body(requestBody)
                 .when()
                 .post("/cars/request")
                 .then()
                 .statusCode(200)
                 .extract().body()
                 .asString();
-        assertDoesNotThrow(() -> UUID.fromString(body));        
+        assertDoesNotThrow(() -> requestBody.fromString(body));        
     }
 }
