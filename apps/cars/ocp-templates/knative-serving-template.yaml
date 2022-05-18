@@ -34,6 +34,15 @@ objects:
               successThreshold: 1
               tcpSocket:
                 port: 0
+            livenessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /${CONTEXT}/health
+                port: 0
+                scheme: HTTP
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 1                
             resources: {}
         enableServiceLinks: false
         timeoutSeconds: 300

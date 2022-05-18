@@ -1,0 +1,126 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: quarkus-knative-deploy
+spec:
+  workspaces:
+  - name: shared-workspace
+  - name: truststore
+  - name: application-properties  
+  params:
+  - name: APP_NAME
+    type: string
+  - name: APP_DIR
+    type: string  
+  - name: HTTP_CONTEXT
+    type: string  
+  - name: DEPLOY_PROJECT
+    type: string  
+  - name: GIT_REPO
+    type: string
+    description: url of the git repo for the code of deployment
+  - name: GIT_BRANCH
+    type: string
+    description: revision to be used from repo of the code for deployment
+    default: master
+  - name: APP_PROFILE
+    description: The Spring Active Profile to use for building and testing the application.
+    default: dev
+    description: folder in git repo where source is
+  - name: IMAGE_REPO
+    type: string
+    description: repo for container image
+    default: quay.io/justindav1s
+  - name: IMAGE_TAG
+    type: string
+    description: tag for container image
+    default: latest
+  - name: VERSION_LABEL
+    type: string
+    description: version label for pod 
+    default: v1
+  - name: CONTAINER_WORKING_DIR
+    type: string
+    description: working dir of container 
+    default: deployments
+  tasks:
+  - name: fetch-repository
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    - name: output
+      workspace: shared-workspace
+    params:
+    - name: url
+      value: $(params.GIT_REPO)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    - name: revision
+      value: $(params.GIT_BRANCH)
+  - name: configure-filesystem
+    taskRef:
+      name: run-script
+      kind: Task
+    workspaces:
+    - name: storage
+      workspace: shared-workspace
+    - name: truststore
+      workspace: truststore
+    - name: application-properties
+      workspace: application-properties       
+    params:
+    - name: APP_NAME
+      value: $(params.APP_NAME)
+    - name: APP_DIR
+      value: $(params.APP_DIR)    
+    - name: script
+      value: |
+        #!/usr/bin/env bash
+        set -xe
+        echo "Script running in $(workspaces.storage.path)"
+        echo "fixing  permissions....."
+        chmod -R 777 $(workspaces.storage.path)
+        # echo "making kafka-trustore.jks available to build/test"
+        # cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
+        ls -ltr $(workspaces.truststore.path)
+        ls -ltr $(workspaces.application-properties.path)        
+    runAfter:
+      - fetch-repository
+  - name: deploy-image
+    taskRef:
+      name: deploy-knative-template
+    runAfter:
+      - configure-filesystem
+    params:
+      - name: APP_NAME
+        value: $(params.APP_NAME)
+      - name: APP_DIR
+        value: $(params.APP_DIR)        
+      - name: HTTP_CONTEXT
+        value: $(params.HTTP_CONTEXT)
+      - name: DEPLOY_PROJECT
+        value: $(params.DEPLOY_PROJECT)
+      - name: IMAGE_REPO
+        value: $(params.IMAGE_REPO)
+      - name: IMAGE_NAME
+        value: $(params.APP_NAME)
+      - name: IMAGE_TAG
+        value: $(params.IMAGE_TAG)
+      - name: PROFILE
+        value: $(params.APP_PROFILE)
+      - name: VERSION_LABEL
+        value: $(params.VERSION_LABEL)
+      - name: SERVICEACCOUNT_NAME
+        value: $(params.APP_NAME)-$(params.APP_PROFILE)-sa
+      - name: CONTAINER_WORKING_DIR
+        value: $(params.CONTAINER_WORKING_DIR)
+    workspaces:
+      - name: source
+        workspace: shared-workspace
+      - name: truststore
+        workspace: truststore
+      - name: application-properties
+        workspace: application-properties
