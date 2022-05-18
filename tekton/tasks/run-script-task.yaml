@@ -8,6 +8,8 @@ spec:
     readOnly: false
   - name: truststore
     readOnly: false    
+  - name: application-properties
+    readOnly: false  
   params:
   - name: script
   steps:
