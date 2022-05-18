@@ -12,7 +12,7 @@ oc project ${CICD_PROJECT}
 oc delete configmap ${APP}-${PROFILE}-application-properties ${APP}-${PROFILE}-kafka-truststore -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-application-properties \
-    --from-file=application.properies=../${APP_DIR}/config/application.${PROFILE}.properties \
+    --from-file=application.properties=../${APP_DIR}/config/application.${PROFILE}.properties \
     -n ${CICD_PROJECT}
 
 oc create configmap ${APP}-${PROFILE}-kafka-truststore \
