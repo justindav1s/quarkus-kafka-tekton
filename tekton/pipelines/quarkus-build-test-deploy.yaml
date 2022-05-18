@@ -87,7 +87,8 @@ spec:
 
         echo Making application.properties available during testing
         ls -ltr $(workspaces.application-properties.path)
-        cp $($(workspaces.application-properties.path))/application.properties $(workspaces.storage.path)/apps/cars/config
+        cp $(workspaces.application-properties.path)/application.properties $(workspaces.storage.path)/apps/cars/config
+        ls -ltr $(workspaces.storage.path)/apps/cars/config
     runAfter:
       - fetch-repository
   - name: test-java-app
