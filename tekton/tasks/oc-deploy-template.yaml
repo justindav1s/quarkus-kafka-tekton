@@ -5,6 +5,8 @@ metadata:
 spec:
   workspaces:
   - name: source
+  - name: truststore
+  - name: application-properties  
   params:
     - name: APP_NAME
       type: string
@@ -58,11 +60,11 @@ spec:
           oc secrets link $(params.SERVICEACCOUNT_NAME) quay-dockercfg --for=pull -n $(params.DEPLOY_PROJECT) 
         
           oc create secret generic $(params.APP_NAME)-$(params.PROFILE)-application-properties \
-              --from-file=src/main/resources/application.$(params.PROFILE).properties \
+              --from-file=$(workspaces.application-properties.path)/application.properties \
               -n $(params.DEPLOY_PROJECT)
 
           oc create secret generic $(params.APP_NAME)-$(params.PROFILE)-kafka-truststore \
-              --from-file=$(workspaces.source.path)/kafka-truststore.jks \
+              --from-file=$(workspaces.truststore.path)/kafka-truststore.jks \
               -n $(params.DEPLOY_PROJECT)
 
           oc label secret $(params.APP_NAME)-$(params.PROFILE)-application-properties app=$(params.APP_NAME) -n $(params.DEPLOY_PROJECT)

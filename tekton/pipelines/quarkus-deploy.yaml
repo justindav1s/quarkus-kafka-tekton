@@ -6,6 +6,7 @@ spec:
   workspaces:
   - name: shared-workspace
   - name: truststore
+  - name: application-properties  
   params:
   - name: APP_NAME
     type: string
@@ -64,6 +65,8 @@ spec:
       workspace: shared-workspace
     - name: truststore
       workspace: truststore
+    - name: application-properties
+      workspace: application-properties       
     params:
     - name: script
       value: |
@@ -72,9 +75,10 @@ spec:
         echo "Script running in $(workspaces.storage.path)"
         echo "fixing  permissions....."
         chmod -R 777 $(workspaces.storage.path)
-        echo "making kafka-trustore.jks available to build/test"
-        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
-        ls -ltr $(workspaces.storage.path)
+        # echo "making kafka-trustore.jks available to build/test"
+        # cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)
+        ls -ltr $(workspaces.truststore.path)
+        ls -ltr $(workspaces.application-properties.path)        
     runAfter:
       - fetch-repository
   - name: deploy-image
@@ -106,3 +110,7 @@ spec:
     workspaces:
       - name: source
         workspace: shared-workspace
+      - name: truststore
+        workspace: truststore
+      - name: application-properties
+        workspace: application-properties

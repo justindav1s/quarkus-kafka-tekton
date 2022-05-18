@@ -88,14 +88,14 @@ spec:
         echo "fixing  permissions....."
         chmod -R 777 $(workspaces.storage.path)
         echo "making kafka-trustore.jks available to build/test"
-        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)/apps/cars/truststore
-        ls -ltr $(workspaces.storage.path)/apps/cars/truststore
+        cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)/$(params.APP_DIR)/truststore
+        ls -ltr $(workspaces.storage.path)/$(params.APP_DIR)/truststore
 
         echo Making application.properties available during testing
         ls -ltr $(workspaces.application-properties.path)
-        cp $(workspaces.application-properties.path)/application.properties $(workspaces.storage.path)/apps/cars/config
-        ls -ltr $(workspaces.storage.path)/apps/cars/config
-        cat $(workspaces.storage.path)/apps/cars/config/application.properties
+        cp $(workspaces.application-properties.path)/application.properties $(workspaces.storage.path)/$(params.APP_DIR)/config
+        ls -ltr $(workspaces.storage.path)/$(params.APP_DIR)/config
+        cat $(workspaces.storage.path)/$(params.APP_DIR)/config/application.properties
     runAfter:
       - fetch-repository
   - name: test-java-app
@@ -119,48 +119,48 @@ spec:
         workspace: maven-settings
       - name: source
         workspace: shared-workspace
-  # - name: build-java-app
-  #   taskRef:
-  #     name: maven
-  #     kind: ClusterTask
-  #   runAfter:
-  #     - test-java-app
-  #   params:
-  #     - name: CONTEXT_DIR
-  #       value: $(params.APP_DIR)
-  #     - name: GOALS
-  #       value:
-  #         - -U
-  #         - -q 
-  #         - -Dmaven.wagon.http.ssl.insecure=true 
-  #         - -Dmaven.wagon.http.ssl.allowall=true
-  #         - -B
-  #         - '-DskipTests'
-  #         - 'clean'
-  #         - 'deploy'
-  #   workspaces:
-  #     - name: maven-settings
-  #       workspace: maven-settings
-  #     - name: source
-  #       workspace: shared-workspace
-  # - name: build-image
-  #   taskRef:
-  #     name: buildah
-  #     kind: ClusterTask
-  #   runAfter:
-  #     - build-java-app
-  #   params:
-  #     - name: IMAGE
-  #       value: $(params.IMAGE_REPO)/$(params.APP_NAME)
-  #     - name: DOCKERFILE
-  #       value: $(params.APP_DIR)/src/main/docker/Dockerfile.jvm 
-  #     - name: CONTEXT
-  #       value: $(params.APP_DIR)
-  #     - name: TLSVERIFY
-  #       value: 'false'
-  #   workspaces:
-  #     - name: source
-  #       workspace: shared-workspace
+  - name: build-java-app
+    taskRef:
+      name: maven
+      kind: ClusterTask
+    runAfter:
+      - test-java-app
+    params:
+      - name: CONTEXT_DIR
+        value: $(params.APP_DIR)
+      - name: GOALS
+        value:
+          - -U
+          - -q 
+          - -Dmaven.wagon.http.ssl.insecure=true 
+          - -Dmaven.wagon.http.ssl.allowall=true
+          - -B
+          - '-DskipTests'
+          - 'clean'
+          - 'deploy'
+    workspaces:
+      - name: maven-settings
+        workspace: maven-settings
+      - name: source
+        workspace: shared-workspace
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    runAfter:
+      - build-java-app
+    params:
+      - name: IMAGE
+        value: $(params.IMAGE_REPO)/$(params.APP_NAME)
+      - name: DOCKERFILE
+        value: $(params.APP_DIR)/src/main/docker/Dockerfile.jvm 
+      - name: CONTEXT
+        value: $(params.APP_DIR)
+      - name: TLSVERIFY
+        value: 'false'
+    workspaces:
+      - name: source
+        workspace: shared-workspace
   # - name: deploy-image
   #   taskRef:
   #     name: deploy-template
