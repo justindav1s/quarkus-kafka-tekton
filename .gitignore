@@ -34,3 +34,4 @@ target/
 **/target/
 
 apps/cars/config/application.properties
+**/.DS_Store

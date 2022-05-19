@@ -3,8 +3,8 @@ kind: KafkaUser
 metadata:
   labels:
     strimzi.io/cluster: my-cluster
-  name: my-user
-  namespace: kafka-cluster
+  name: mtls-user
+  namespace: kafka-cluster2
 spec:
   authentication:
-    type: scram-sha-512
+    type: tls
