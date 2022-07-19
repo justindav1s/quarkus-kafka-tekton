@@ -128,12 +128,35 @@ spec:
         workspace: maven-settings
       - name: source
         workspace: shared-workspace
+  - name: list-build-output
+    taskRef:
+      name: run-script
+      kind: Task
+    workspaces:
+    - name: storage
+      workspace: shared-workspace     
+    params:
+    - name: APP_NAME
+      value: $(params.APP_NAME)
+    - name: APP_DIR
+      value: $(params.APP_DIR)
+    - name: script
+      value: |
+        #!/usr/bin/env bash
+        set -xe
+        echo "Script running in $(workspaces.storage.path)"
+        cd $(workspaces.storage.path)
+        find apps/$(params.APP_NAME)/target
+        cd $(workspaces.storage.path)/apps/$(params.APP_NAME)/target
+        pwd
+    runAfter:
+      - build-java-app
   - name: build-image
     taskRef:
       name: buildah
       kind: ClusterTask
     runAfter:
-      - build-java-app
+      - list-build-output
     params:
       - name: IMAGE
         value: $(params.IMAGE_REPO)/$(params.APP_NAME)
