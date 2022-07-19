@@ -66,11 +66,7 @@ spec:
       kind: Task
     workspaces:
     - name: storage
-      workspace: shared-workspace
-    - name: truststore
-      workspace: truststore
-    - name: application-properties
-      workspace: application-properties      
+      workspace: shared-workspace     
     params:
     - name: APP_NAME
       value: $(params.APP_NAME)
@@ -85,15 +81,6 @@ spec:
         echo APP_NAME: $(params.APP_NAME)
         echo "fixing  permissions....."
         chmod -R 777 $(workspaces.storage.path)
-        # echo "making kafka-trustore.jks available to build/test"
-        # cp $(workspaces.truststore.path)/kafka-truststore.jks $(workspaces.storage.path)/$(params.APP_DIR)/truststore
-        # ls -ltr $(workspaces.storage.path)/$(params.APP_DIR)/truststore
-
-        # echo Making application.properties available during testing
-        # ls -ltr $(workspaces.application-properties.path)
-        # cp $(workspaces.application-properties.path)/application.properties $(workspaces.storage.path)/$(params.APP_DIR)/config
-        # ls -ltr $(workspaces.storage.path)/$(params.APP_DIR)/config
-        # cat $(workspaces.storage.path)/$(params.APP_DIR)/config/application.properties
     runAfter:
       - fetch-repository
   - name: test-java-app
