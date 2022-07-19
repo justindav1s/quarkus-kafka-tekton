@@ -1,0 +1,43 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: servicea-config
+  namespace: amazin-serverless
+data:
+  application.properties: |
+    org.jnd.microservices.quarkus.ServiceBClient/mp-rest/url=http://serviceb-native.amazin-serverless.svc.cluster.local
+    org.jnd.microservices.quarkus.ServiceBClient/mp-rest/scope=javax.inject.Singleton
+
+    config.test.data.2=This is Config Data 2
+---
+apiVersion: serving.knative.dev/v1beta1
+kind: Service
+metadata:
+  name: servicea-native
+  namespace: amazin-serverless
+spec:
+  template:
+    metadata:
+      annotations:
+        client.knative.dev/user-image: 'quay.io/justindav1s/servicea-native:a47e5bb'
+    spec:
+      containerConcurrency: 1
+      containers:
+        - env:
+            - name: TARGET
+              value: Knative
+          image: 'quay.io/justindav1s/servicea-native:a47e5bb'
+          name: user-container
+          resources: {}
+          volumeMounts:
+            - name: config-vol
+              mountPath: /work/config
+      timeoutSeconds: 300
+      volumes:
+        - name: config-vol
+          configMap:
+            name: servicea-config
+            defaultMode: 420
+  traffic:
+    - latestRevision: true
+      percent: 100

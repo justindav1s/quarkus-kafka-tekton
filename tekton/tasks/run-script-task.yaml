@@ -6,10 +6,10 @@ spec:
   workspaces:
   - name: storage
     readOnly: false
-  - name: truststore
-    readOnly: false    
-  - name: application-properties
-    readOnly: false  
+  # - name: truststore
+  #   readOnly: false    
+  # - name: application-properties
+  #   readOnly: false  
   params:
   - name: script
     type: string

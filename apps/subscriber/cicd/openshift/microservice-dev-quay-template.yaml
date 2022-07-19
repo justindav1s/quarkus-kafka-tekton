@@ -1,0 +1,304 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: microservice-deploy
+objects:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      annotations:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}-sa
+
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata:
+      annotations:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      output:
+        to:
+          kind: DockerImage
+          name: quay.io/justindav1s/${APPLICATION_NAME}:latest
+        pushSecret:
+          name: quayio-dockercfg
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        binary: {}
+        type: Binary
+      strategy:
+        sourceStrategy:
+          from:
+            kind: ImageStreamTag
+            name: ${BASE_IMAGE}
+            namespace: ${BASE_IMAGE_NAMESPACE}
+        type: Source
+
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata:
+      annotations:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}-native
+    spec:
+      source:
+        type: Binary
+        binary: {}
+      strategy:
+        type: Docker
+        dockerStrategy:
+          dockerfilePath: src/main/docker/Dockerfile.native     
+      output:
+        to:
+          kind: DockerImage
+          name: quay.io/justindav1s/${APPLICATION_NAME}-native:latest
+        pushSecret:
+          name: quayio-dockercfg
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial 
+
+  - apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      replicas: 1
+      selector:
+        app: ${APPLICATION_NAME}
+        deploymentconfig: ${APPLICATION_NAME}
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          annotations:
+          labels:
+            app: ${APPLICATION_NAME}
+            deploymentconfig: ${APPLICATION_NAME}
+        spec:
+          serviceAccountName: ${APPLICATION_NAME}-sa
+          containers:
+            - env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: dev
+              image: ' '
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health/live
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: ${APPLICATION_NAME}
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health/ready
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /config
+                  name: ${APPLICATION_NAME}-config-vol
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                defaultMode: 420
+                name: ${APPLICATION_NAME}-config
+              name: ${APPLICATION_NAME}-config-vol
+
+  - apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+      labels:
+        app: ${APPLICATION_NAME}-native
+      name: ${APPLICATION_NAME}-native
+    spec:
+      replicas: 1
+      selector:
+        app: ${APPLICATION_NAME}-native
+        deploymentconfig: ${APPLICATION_NAME}-native
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          annotations:
+          labels:
+            app: ${APPLICATION_NAME}-native
+            deploymentconfig: ${APPLICATION_NAME}-native
+        spec:
+          serviceAccountName: ${APPLICATION_NAME}-sa
+          containers:
+            - env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: dev
+              image: ' '
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health/live
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: ${APPLICATION_NAME}
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health/ready
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /config
+                  name: ${APPLICATION_NAME}-config-vol
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                defaultMode: 420
+                name: ${APPLICATION_NAME}-native-config
+              name: ${APPLICATION_NAME}-config-vol              
+
+
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      port:
+        targetPort: 8080
+      to:
+        kind: Service
+        name: ${APPLICATION_NAME}
+        weight: 100
+      wildcardPolicy: None
+
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations:
+      labels:
+        app: ${APPLICATION_NAME}-native
+      name: ${APPLICATION_NAME}-native
+    spec:
+      port:
+        targetPort: 8080
+      to:
+        kind: Service
+        name: ${APPLICATION_NAME}-native
+        weight: 100
+      wildcardPolicy: None      
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      ports:
+        - port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: ${APPLICATION_NAME}
+        deploymentconfig: ${APPLICATION_NAME}
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ${APPLICATION_NAME}-native
+      name: ${APPLICATION_NAME}-native
+    spec:
+      ports:
+        - port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: ${APPLICATION_NAME}-native
+        deploymentconfig: ${APPLICATION_NAME}-native
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}      
+      
+parameters:
+  - description: The name for the application.
+    name: APPLICATION_NAME
+    required: true
+    value: basket
+  - description: The name for the application.
+    name: PROJECT
+    required: true
+    value: inventory
+  - description: Base Docker image namespace.
+    name: BASE_IMAGE_NAMESPACE
+    required: true
+    value: "openshift"
+  - description: Base Docker image.
+    name: BASE_IMAGE
+    required: true
+    value: "java:8"

@@ -36,7 +36,7 @@ public class CarsResource {
      * Endpoint to generate a new Car request id and send it to "Car-requests" Kafka topic using the emitter.
      */
     @POST
-    @Path("/request")
+    @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Car createRequest(Car car) {
