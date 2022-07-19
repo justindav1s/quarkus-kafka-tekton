@@ -24,7 +24,7 @@ public class QuarkusTests {
 
   @Test
   public void livenessTest() {
-    Response response = given().when().get("/health/live").then().statusCode(200).extract().response();
+    Response response = given().when().get("/q/health/live").then().statusCode(200).extract().response();
 
     try {
       ObjectMapper mapper = new ObjectMapper();
@@ -39,7 +39,7 @@ public class QuarkusTests {
 
   @Test
   public void readinessTest() {
-    Response response = given().when().get("/health/ready").then().statusCode(200).extract().response();
+    Response response = given().when().get("/q/health/ready").then().statusCode(200).extract().response();
 
     try {
       ObjectMapper mapper = new ObjectMapper();
